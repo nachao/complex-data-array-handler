@@ -25,8 +25,8 @@
 <script src="./narray.min-0.1.js"></script>
 
 // 不同类型的数据
-var testData1 = [1, 2, 3, 4, 5],
-    testData2 = [
+var figures = [1, 2, 2, 3, 3, 3, 4, 4, 5],
+    names = [
 		{
 			id: 1,
 			name: 'Sunny',
@@ -56,27 +56,27 @@ var testData1 = [1, 2, 3, 4, 5],
 		}
     ];
 
-testData1.$get('>3');	// -> [4, 4, 5]
+figures.$get('>3');	// -> [4, 4, 5]
 
-testData1.$get('!=3');	// -> [1, 2, 2, 4, 4, 5]
+figures.$get('!=3');	// -> [1, 2, 2, 4, 4, 5]
 
 // 在对象数据中查询，以下几种方式结果一样
-testData2.$get('1, 2, 5');		
+names.$get('1, 2, 5');		
 // -> [
 //		{id: 1, name: 'Sunny', alias: '莎妮'},
 //		{id: 2, name: 'Mary', alias: '玛丽', }, 
 //		{id: 5, name: 'Betty', alias: '贝蒂'}
 // 	]
 
-testData2.$get('id=1, id=2, id=5');	// 效果同上
+names.$get('id=1, id=2, id=5');	// 效果同上
 
-testData2.$get('id=1|2|5');		    // 效果同上
+names.$get('id=1|2|5');		    // 效果同上
 
-testData2.$get('id<3, id>4');		// 效果同上
+names.$get('id<3, id>4');		// 效果同上
 
 // 传入数组查询
 var ids = [1, 2, 5];
-testData2.$get('id=' + ids.join('|'));	// 效果同上
+names.$get('id=' + ids.join('|'));	// 效果同上
 ```
 
 ### 搜索数据（主要功能）
@@ -98,15 +98,15 @@ testData2.$get('id=' + ids.join('|'));	// 效果同上
 ##### $search - 实例（数据沿用 $get 的）：
 ```javascript
 // 以下几种 $search 获取的数据一样
-testData2.$search('c');
+names.$search('c');
 // -> [
 //		{id: 3, name: 'Crystal', alias: '克里丝塔', remark: '冰雪聪明的'}, 
 //		{id: 4, name: 'Cindy', alias: '辛迪', remark: '甜美'},
 // 	]
 
-testData2.$search('name=c');	// 效果同上
+names.$search('name=c');	// 效果同上
 
-testData2.$search('remark=');	// 效果同上，只查询有 remark 值的数据
+names.$search('remark=');	// 效果同上，只查询有 remark 值的数据
 ```
 
 ### 数据内容抽取
@@ -126,7 +126,7 @@ testData2.$search('remark=');	// 效果同上，只查询有 remark 值的数据
 ##### $search - 实例（数据沿用 $get 的）：
 ```javascript
 // 只输出 name 和 alias 两个值
-testData2.$fetch('name, alias');
+names.$fetch('name, alias');
 // -> [
 //		{"name":"Sunny","alias":"莎妮"},
 //		{"name":"Mary","alias":"玛丽"},
@@ -150,7 +150,7 @@ testData2.$fetch('name, alias');
 
 ##### $unique - 实例（数据沿用 $get 的）：
 ```javascript
-testData1.$get('>=3').$unique();  // [3, 3, 3, 4, 4, 5] -> [3, 4, 5]
+figures.$get('>=3').$unique();  // [3, 3, 3, 4, 4, 5] -> [3, 4, 5]
 ```
 
 ### 数据批量更新
@@ -168,7 +168,7 @@ testData1.$get('>=3').$unique();  // [3, 3, 3, 4, 4, 5] -> [3, 4, 5]
 
 ##### $update - 实例（数据沿用 $get 的）：
 ```javascript
-testData2.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
+names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
 // -> [
 //		{id: 1, name: 'Zara', alias: '赞拉'},
 //		{id: 5, name: 'Zara', alias: '赞拉'}
