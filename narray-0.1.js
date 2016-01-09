@@ -41,6 +41,36 @@ nArray.extend({
 
 		return result;
 	},
+	toArray: function ( object, key ) {
+		var result = [];
+
+		if ( !object )
+			return;
+
+		for ( var i in object ) {
+			if ( typeof key == 'string' )
+				object[i][key] = i;
+			result.push(object[i]);
+		}
+
+		return result;
+	},
+	toObject: function ( array, key ) {
+		var result = {};
+
+		if ( !array )
+			return;
+
+		for ( var i=0; i<array.length; i++ ) {
+			if ( typeof key == 'string' && array[i][key] ) {
+				result[array[i][key]] = array[i];
+			}
+			else
+				result[i] = array[i];
+		}
+
+		return result;
+	},
 
 	// Will get characters converted to parameters
 	resolve: function ( value ) {
@@ -122,8 +152,8 @@ nArray.extend({
 	// Return {boolean}
 	mateMethod: function ( method, first, param ) {
 		var result = false,
-			second = param.val,
-			firstStr = first.toString(),
+			second = param.val.toLocaleLowerCase(),
+			firstStr = first.toString().toLocaleLowerCase(),
 			firstNum = Number(first),
 			secondNum = Number(second);
 
@@ -160,9 +190,10 @@ nArray.extend({
 	// According to the specified method, determine whether the data meet the conditions
 	// Match Mode: = , != , > , <
 	// Return {boolean}
-	mateData: function ( method, data, parameter ) {
+	mateData: function ( method, data, parameter, whole ) {
 		var result = false,
 			length = parameter.length,
+			rights = 0,
 			param,
 			key,
 			val,
@@ -179,8 +210,8 @@ nArray.extend({
 			if ( key ) {
 
 				// 判断数据是否对应键值和值
-				if ( data[key] && ( result = nArray.mateMethod(method, data[key], param ) ) )
-					break;
+				if ( data[key] ) 
+					result = nArray.mateMethod(method, data[key], param );
 			}
 
 			// 如果数据没有键值，但有数据值
@@ -209,10 +240,15 @@ nArray.extend({
 				}
 
 				// 其他类型数据
-				else {
-					if ( result = nArray.mateMethod(method, data, param ) )
-						break;
-				}
+				else
+					result = nArray.mateMethod(method, data, param );
+			}
+
+			if ( result ) {
+				if ( !!whole )
+					result = ( ++rights == length );
+				else
+					break;
 			}
 		}
 
@@ -220,15 +256,13 @@ nArray.extend({
 	},
 
 	// Loop all data, return the match result
-	mateFor: function (method, datas, parameter ) {
+	mateFor: function (method, datas, parameter, whole ) {
 		var result = [];
 
 		parameter = nArray.resolve(parameter);
 
-		console.log(parameter);
-
 		for ( var i=0; i<datas.length; i++ ) {
-			if ( nArray.mateData(method, datas[i], parameter) )
+			if ( nArray.mateData(method, datas[i], parameter, whole) )
 				result.push(datas[i]);
 		}
 
@@ -236,24 +270,24 @@ nArray.extend({
 	},
 
 	// Whether the specified conditions are determined for the 'full match' data
-	mateFull: function ( datas, parameter ) {
-		return parameter ? nArray.mateFor('full', datas, parameter) : datas;
+	mateFull: function ( datas, parameter, whole ) {
+		return parameter ? nArray.mateFor('full', datas, parameter, whole) : datas;
 	},
 
 	// Whether the specified condition is a 'fuzzy match' of the data
-	mateFuzzy: function ( datas, parameter ) {
-		return parameter ? nArray.mateFor('fuzzy', datas, parameter) : datas;
+	mateFuzzy: function ( datas, parameter, whole ) {
+		return parameter ? nArray.mateFor('fuzzy', datas, parameter, whole) : datas;
 	}
 });
 
 // 对数据进行完整匹配查询，支持条件判断：<,>,>=,<=,=,!=
-Array.prototype.$get = function(value) {
-	return nArray.mateFull(this, value);
+Array.prototype.$get = function ( value, whole ) {
+	return nArray.mateFull(this, value, whole);
 }
 
 // 对数据进行模糊查询，支持条件判断：<,>,>=,<=,=,!=
-Array.prototype.$search = function ( value ) {
-	return nArray.mateFuzzy(this, value);
+Array.prototype.$search = function ( value, whole ) {
+	return nArray.mateFuzzy(this, value, whole);
 },
 
 // 对数据进行过滤，提取指定需要的值
