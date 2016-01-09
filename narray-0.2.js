@@ -111,6 +111,23 @@ nArray.extend({
 
 		return result;
 	},
+	update: function ( data, value ) {
+		if ( typeof value != 'undefined' ) {
+
+			// 确保数据类型相同
+			if ( data.constructor == value.constructor ) {
+				if ( typeof value == 'object' ) {
+					nArray.each(value, function(i, val){
+						data[i] = val;
+					});
+				}
+				else {
+					data = value;
+				}
+			}
+		}
+		return data;
+	},
 
 	// Will get characters converted to parameters
 	mateResolve: function ( value ) {
@@ -174,7 +191,7 @@ nArray.extend({
 				// 条件格式，及默认数据
 				result = {
 					key: key,
-					val: val,
+					val: val == '*' ? '' : val,
 					mode: mode
 				};
 			}
@@ -259,11 +276,12 @@ nArray.extend({
 			if ( param.key ) {
 
 				// 判断数据是否对应键值和值
-				if ( typeof datas == 'object' && nArray.mateKeys(datas, param) ) {
+				if ( typeof datas == 'object' ) {
 
 					// 循环对象或数组全部数据，直到有匹配中的值为止
-					nArray.each(datas, function(i, data){
-						return result = nArray.mateValues(data, param, method);
+					nArray.each(datas, function(key, data){
+						if ( nArray.mateKeys(key, param, method) && nArray.mateValues(data, param, method) )
+							return result = true;
 					});
 				}
 			}
@@ -296,10 +314,16 @@ nArray.extend({
 	// To the corresponding two values, select the matching method
 	// Param {object|array} data
 	// Return {boolean}
-	mateKeys: function ( data, param ) {
-		return nArray.each(data, function(key){
-			return String(key).indexOf(param.key) >= 0;
-		});
+	mateKeys: function ( key, param, method ) {
+		param.key = param.key.toLocaleLowerCase();
+		key = String(key).toString().toLocaleLowerCase();
+
+		return method.indexOf('full') >= 0 ?
+			key === param.key :
+			key.indexOf(param.key) >= 0;
+		// return nArray.each(data, function(key){
+		// 	return String(key).indexOf(param.key) >= 0;
+		// });
 	},
 
 	// To the corresponding two values, select the matching method
@@ -401,21 +425,17 @@ Array.prototype.$fetch = function ( value ) {
 
 // 对数据进行批量修改或扩展
 Array.prototype.$update = function ( value ) {
-	if ( typeof value != 'undefined' ) {
+	var result;
 
-		// 循环全部数据
-		for ( var i=0; i<this.length; i++ ) {
+	// 循环全部数据
+	for ( var i=0; i<this.length; i++ ) {
 
-			// 确保数据类型相同
-			if ( this[i].constructor == value.constructor ) {
-				if ( typeof value == 'object' )
-					for ( var j in value )
-						this[i][j] = value[j];
-				else
-					this[i] = value;
-			}
-		}
+		if ( typeof value == 'function' )
+			result = value.call(this[i], this.$path[i]);
+
+		nArray.update(this[i], result);
 	}
+
 	return this;
 }
 
@@ -430,3 +450,6 @@ Array.prototype.$unique = function () {
 
 	return result;
 }
+
+// 数据路径
+Array.prototype.$path = []
