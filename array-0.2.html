@@ -40,6 +40,49 @@
 			    ];
 
 
+				var a1 = [
+						{
+							b1: {
+								c1: {
+									d1: {
+										e1: {
+											f1: 'afasdqw',
+											f2: '1231',
+											f3: '999999999',
+											f4: 11,
+											f5: 'a'
+										}
+									},
+									d2: 'a',
+									d3: 'b',
+									d4: 'c'
+								},
+								c2: 'c',
+								c3: [1,2,3,4],
+								c4: [
+									{
+										d4: 11,
+										d5: 22
+									},
+									{
+										d6: 33
+									},
+									{
+										d7: [111,222,333]
+									},
+									{
+										d8: 'a',
+										d9: ['b', 'c']
+									}
+								]
+							},
+							b2: '111',
+							b3: 1
+						}
+					];
+
+
+			    /*
 
 
 
@@ -105,6 +148,8 @@
 				// 	]
 
 
+
+
 				var ss = [
 						{
 							id: 1,
@@ -119,78 +164,57 @@
 					];
 
 
-				var a1 = [
-						{
-							b1: {
-								c1: {
-									d1: {
-										e1: {
-											f1: 'afasdqw',
-											f2: '1231',
-											f3: '999999999'
-										}
-									},
-									d2: 'a',
-									d3: 'b'
-								},
-								c2: 'c',
-								c3: [1,2,3],
-								c4: [
-									{
-										d4: 11,
-										d5: 22
-									},
-									{
-										d6: 33
-									},
-									{
-										d7: [111,222,333]
-									}
-								]
-							},
-							b2: '111'
-						}
-					];
 
 
+				function be () {
 
-				function is (a, b, c) {
-					var result;
-
-					if ( !c )
-						c = [a];
-
-					for ( var i=0; i<c )
-
-					if ( a.constructor == Object ) {
-						c ? c.push(a) : c=[a];
-						// console.log(c);
-						for ( var k in a ) {							
-							if ( is(a[k], b, c) )
-								return a[k];
-						}
-					}
-					else if ( a.constructor == Array ) {
-						c ? c.push(a) : c=[a];
-						for ( var k=0; k<a.length; k++ ) {							
-							if ( is(a[k], b, c) )
-								return a[k];
-						}
-					}
-
-					if ( a == b ) {
-						// console.log(c);	
-						console.log(a);
-						return a;
-					}
-					else {
-						console.log(c);
-					}
 				}
 
-				is(a1, 22);
+				function is (datas, params, store, paths ) {
+					var result = [],
+						i;
 
+					if ( !paths )
+						paths = [];
 
+					for ( var i=0; i<paths.length; i++ )
+						result.push(paths[i]);
+
+					if ( datas.constructor == Object ) {
+						result.push(datas);
+						for ( i in datas ) {							
+							if ( is(datas[i], params, store, result) )
+								break;
+						}
+					}
+					else if ( datas.constructor == Array ) {
+						result.push(datas);
+						for ( i=0; i<datas.length; i++ ) {							
+							if ( is(datas[i], params, store, result) )
+								break;
+						}
+					}
+					else if ( datas == params ) {
+						store.push(result[result.length-1]);
+
+						if ( store.constructor.prototype.$path )
+							store.constructor.prototype.$path = []
+
+						store.constructor.prototype.$path.push(result);
+					}
+				}
+				
+				var store = [];
+				is(a1, [
+						{
+							key: '',
+							val: 'c',
+							mode: '='
+						}
+					], store)
+				console.log(store);
+
+				*/
 
 
 				
