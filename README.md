@@ -57,11 +57,16 @@ testData1.$get('>3');	// -> [4, 5]
 testData1.$get('!=3');	// -> [1, 2, 4, 5]
 
 // 在对象数据中查询，以下几种方式结果一样
-testData2.$get('1, 2, 5');		// -> [{id: 1, name: 'a', remark: 'nArray.js'}, {id: 2, name: 'b', remark: 'hello world!'}, {id: 5, name: 'e', remark: 'examples.'}]
+testData2.$get('1, 2, 5');		
+// -> [
+//        {id: 1, name: 'a', remark: 'nArray.js'}, 
+//        {id: 2, name: 'b', remark: 'hello world!'}, 
+//        {id: 5, name: 'e', remark: 'examples.'}
+//    ]
 
 testData2.$get('id=1, id=2, id=5');	// 效果同上
 
-testData2.$get('id=1|2|5');		// 效果同上
+testData2.$get('id=1|2|5');		    // 效果同上
 
 testData2.$get('id<3, id>4');		// 效果同上
 
