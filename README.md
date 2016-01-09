@@ -110,7 +110,7 @@ names.$search('c');
 
 names.$search('name=c');	// 效果同上
 
-names.$search('remark=');	// 效果同上，只查询有 remark 值的数据
+names.$search('remark=*');	// 效果同上，只查询有 remark 值的数据
 ```
 
 ### 3、数据内容抽取
