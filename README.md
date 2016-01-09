@@ -42,8 +42,17 @@ var testData1 = [1, 2, 3, 4, 5],
             remark: 'world'
         }
     ];
-    
-testData1.$
+
+	testData1.$get('>3');	// -> [4, 5]
+
+	testData1.$get('!=3');	// -> [1, 2, 4, 5]
+
+	// 在对象数据中查询，以下三种方式结果一样
+	testData2.$get('1, 2');	// -> {id: 1, name: 'a', remark: 'test'}, {id: 2, name: 'bb', remark: 'hello'},
+
+	testData2.$get('id=1, id=2');	// 效果同上
+
+	testData2.$get('id=1|2');		// 效果同上
 ```
 
 
