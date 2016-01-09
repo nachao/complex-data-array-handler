@@ -31,6 +31,24 @@ nArray.extend({
 	trim: function(t){
 		return typeof t == 'string' ? t.replace(/^\s+|\s+$/g, "") : t;
 	},
+	indexOf: function(array, elt /*, from*/){
+		var len = array.length >>> 0;
+		var from = Number(arguments[1]) || 0;
+
+		from = (from < 0)
+			? Math.ceil(from)
+			: Math.floor(from);
+
+		if (from < 0)
+			from += len;
+
+		for (; from < len; from++) {
+			if (from in array && array[from] === elt)
+				return from;
+		}
+
+		return -1;
+	},
 	toKeys: function ( object ) {
 		var result = [];
 
@@ -307,7 +325,7 @@ Array.prototype.$fetch = function ( value ) {
 		for ( var i=0; i<this.length; i++ ) {
 			item = {};
 			for ( var j=0; j<factor.length; j++ ) {
-				if ( nArray.toKeys(this[i]).indexOf(factor[j]) >= 0 )
+				if ( nArray.indexOf(nArray.toKeys(this[i]), factor[j]) >= 0 )
 					item[factor[j]] = this[i][factor[j]];
 			}
 			if ( nArray.toKeys(item).length )
