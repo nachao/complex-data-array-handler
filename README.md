@@ -1,7 +1,7 @@
 # nArray
 > 文件为扩展数组的一个小工具，为了帮助你更好的管理你的数据。
 
-### 获取数据（主要功能）
+### 1、获取数据（主要功能）
 ```javascript
 [].$get();
 ```
@@ -81,7 +81,7 @@ var ids = [1, 2, 5];
 names.$get('id=' + ids.join('|'));	// 效果同上
 ```
 
-### 搜索数据（主要功能）
+### 2、搜索数据（主要功能）
 
 ```javascript
 [].$search();
@@ -111,7 +111,7 @@ names.$search('name=c');	// 效果同上
 names.$search('remark=');	// 效果同上，只查询有 remark 值的数据
 ```
 
-### 数据内容抽取
+### 3、数据内容抽取
 
 ```javascript
 [].$fetch();
@@ -138,7 +138,7 @@ names.$fetch('name, alias');
 //	]
 ```
 
-### 数据去重复
+### 4、数据去重复
 
 ```javascript
 [].$unique();
@@ -155,7 +155,7 @@ names.$fetch('name, alias');
 figures.$get('>=3').$unique();  // [3, 3, 3, 4, 4, 5] -> [3, 4, 5]
 ```
 
-### 数据批量更新
+### 5、数据批量更新
 
 ```javascript
 [].$update();
@@ -176,3 +176,11 @@ names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
 //		{id: 5, name: 'Zara', alias: '赞拉'}
 // 	]
 ```
+
+### 5、查看数据路径（唯一的属性）
+
+```javascript
+[].$path();
+```
+> 因为支持深度查询，所有为了更好的跟踪数据而提高的方法。
+> 此参数为一个数组，路径数据位置对应获取的数据位置。
