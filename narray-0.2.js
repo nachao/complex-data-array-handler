@@ -452,6 +452,8 @@ Array.prototype.$update = function ( value ) {
 
 		if ( typeof value == 'function' )
 			result = value.call(this[i], this.$path[i]);
+		else
+			result = value;
 
 		nArray.update(this[i], result);
 	}
