@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>nArray - 0.1</title>
+		<script src="./narray-0.1.js"></script>
+	</head>
+	<body>
+		<script>
+
+			var figures = [1, 2, 2, 3, 3, 3, 4, 4, 5],
+			    names = [
+					{
+						id: 1,
+						name: 'Sunny',
+						alias: '莎妮'
+					},
+					{
+						id: 2,
+						name: 'Mary',
+						alias: '玛丽',
+					},
+					{
+						id: 3,
+						name: 'Crystal',
+						alias: '克里丝塔',
+						remark: '冰雪聪明的'
+					},
+					{
+						id: 4,
+						name: 'Cindy',
+						alias: '辛迪',
+						remark: '甜美'
+					},
+					{
+						id: 5,
+						name: 'Betty',
+						alias: '贝蒂'
+					}
+			    ];
+
+
+
+
+
+				figures.$get('>3');	// -> [4, 4, 5]
+
+				figures.$get('!=3');	// -> [1, 2, 2, 4, 4, 5]
+
+
+				// 以下几种 $get 获取的数据一样
+				names.$get('1, 2, 5');
+				// -> [
+				//		{id: 1, name: 'Sunny', alias: '莎妮'},
+				//		{id: 2, name: 'Mary', alias: '玛丽', }, 
+				//		{id: 5, name: 'Betty', alias: '贝蒂'}
+				// 	]
+
+				names.$get('id=1, id=2, id=5');	// 效果同上
+
+				names.$get('id=1|2|5');			// 效果同上
+
+				names.$get('id<3, id>4');		// 效果同上
+
+				// 传入数组查询
+				var ids = [1, 2, 5];
+				names.$get('id=' + ids.join('|'));		// 效果同上
+
+
+
+
+
+				// 以下几种 $search 获取的数据一样
+				names.$search('c');
+				// -> [
+				//		{id: 3, name: 'Crystal', alias: '克里丝塔', remark: '冰雪聪明的'}, 
+				//		{id: 4, name: 'Cindy', alias: '辛迪', remark: '甜美'},
+				// 	]
+
+				names.$search('name=c');	// 效果同上
+
+				names.$search('remark=');	// 效果同上，只查询有 remark 值的数据
+
+
+
+
+
+				// 只输出 name 和 alias 两个值
+				names.$fetch('name, alias');
+				// -> [
+				//		{"name":"Sunny","alias":"莎妮"},
+				//		{"name":"Mary","alias":"玛丽"},
+				//		{"name":"Crystal","alias":"克里丝塔"},
+				//		{"name":"Cindy","alias":"辛迪"},
+				//		{"name":"Betty","alias":"贝蒂"}
+				//	]
+
+
+
+
+				// names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
+				// -> [
+				//		{id: 1, name: 'Zara', alias: '赞拉'},
+				//		{id: 5, name: 'Zara', alias: '赞拉'}
+				// 	]
+
+
+
+		</script>
+	</body>
+</html>
