@@ -305,7 +305,7 @@ nArray.extend({
 			}
 
 			// 如果数据没有键值，但有数据值
-			else if ( param.val ) {
+			else {
 				if ( typeof datas == 'object' ) {
 					nArray.each(datas, function(i, data){
 						return result = nArray.mateValues(data, param, method);
@@ -339,9 +339,6 @@ nArray.extend({
 		return method.indexOf('full') >= 0 ?
 			key === param.key :
 			key.indexOf(param.key) >= 0;
-		// return nArray.each(data, function(key){
-		// 	return String(key).indexOf(param.key) >= 0;
-		// });
 	},
 
 	// To the corresponding two values, select the matching method
