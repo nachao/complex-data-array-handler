@@ -290,7 +290,7 @@ nArray.extend({
 			// 如果数据有键值
 			if ( param.key ) {
 
-				// 判断数据是否对应键值和值
+				// 条件有主键，被查询数据一定需要时数组或对象
 				if ( typeof datas == 'object' ) {
 
 					// 循环对象或数组全部数据，直到有匹配中的值为止
@@ -344,32 +344,34 @@ nArray.extend({
 	// To the corresponding two values, select the matching method
 	// Return {boolean}
 	mateValues: function ( value, param, method ) {
-		var result = false;
-			
-		param.val = param.val.toLocaleLowerCase();
-		value = value.toString().toLocaleLowerCase();
+		var result = false,
+			strValue = value.toString().toLocaleLowerCase(),
+			strVal = param.val.toString().toLocaleLowerCase(),
+			numVal = !!Number(param.val) ? Number(param.val) : param.val;
 
 		if ( param.mode == '=' )
 			result = method.indexOf('full') >= 0 ?
-				value === param.val :
-				value.indexOf(param.val) >= 0;
+				strValue === strVal :
+				strValue.indexOf(strVal) >= 0;
 
-		else if ( param.mode == '!=' ) 
+		else if ( param.mode == '!=' )
 			result = method.indexOf('search') >= 0 ?
-				value.indexOf(param.val) < 0 :
-				value !== param.val;
+				strValue.indexOf(strVal) < 0 :
+				strValue !== strVal;
 
-		else if ( param.mode == '>' )
-			result = value > param.val;
+		else {
+			if ( param.mode == '>' )
+				result = value > numVal;
 
-		else if ( param.mode == '>=' )
-			result = value >= param.val;
+			else if ( param.mode == '>=' )
+				result = value >= numVal;
 
-		else if ( param.mode == '<' )
-			result = value < param.val;
+			else if ( param.mode == '<' )
+				result = value < numVal;
 
-		else if ( param.mode == '<=' )
-			result = value <= param.val;
+			else if ( param.mode == '<=' )
+				result = value <= numVal;
+		}
 
 		return result;
 	},
