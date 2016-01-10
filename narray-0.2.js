@@ -211,10 +211,7 @@ nArray.extend({
 			params = nArray.mateResolve(parameter);
 
 		// 初始化查询路径
-		result.constructor.prototype.$path = {
-			key: [],
-			value: []
-		}
+		result.constructor.prototype.$path = []
 
 		// 深度查询方式
 		nArray.mateDepth(method, params, datas, result);
@@ -246,8 +243,10 @@ nArray.extend({
 			newKeys.push(key);
 			if ( nArray.mateData(method, params, datas) ) {
 				result.push(path[path.length-1]);
-				result.constructor.prototype.$path.key.push(newKeys);
-				result.constructor.prototype.$path.value.push(path);
+				result.constructor.prototype.$path.push({
+					key: newKeys,
+					value: path
+				});
 			}
 			for ( i in datas ) {				
 				if ( nArray.mateDepth(method, params, datas[i], result, path, newKeys, i) )
@@ -259,8 +258,10 @@ nArray.extend({
 			newKeys.push(key);
 			if ( nArray.mateData(method, params, datas) ) {
 				result.push(path[path.length-1]);
-				result.constructor.prototype.$path.key.push(newKeys);
-				result.constructor.prototype.$path.value.push(path);
+				result.constructor.prototype.$path.push({
+					key: newKeys,
+					value: path
+				});
 			}
 			for ( i=0; i<datas.length; i++ ) {				
 				if ( nArray.mateDepth(method, params, datas[i], result, path, newKeys, i) )
@@ -269,8 +270,10 @@ nArray.extend({
 		}
 		else if ( nArray.mateData(method, params, datas) ) {
 			result.push(path[path.length-1]);
-			result.constructor.prototype.$path.key.push(newKeys);
-			result.constructor.prototype.$path.value.push(path);
+				result.constructor.prototype.$path.push({
+					key: newKeys,
+					value: path
+				});
 		}
 	},
 
@@ -448,7 +451,7 @@ Array.prototype.$update = function ( value ) {
 	for ( var i=0; i<this.length; i++ ) {
 
 		if ( typeof value == 'function' )
-			result = value.call(this[i], this.$path.value[i]);
+			result = value.call(this[i], this.$path[i]);
 
 		nArray.update(this[i], result);
 	}
@@ -469,7 +472,4 @@ Array.prototype.$unique = function () {
 }
 
 // 数据路径
-Array.prototype.$path = {
-	key: [],
-	value: []
-}
+Array.prototype.$path = [];
