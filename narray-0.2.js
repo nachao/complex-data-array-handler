@@ -17,7 +17,6 @@ function nArray( value, detail ){
 	if ( window == this )
 		return new nArray(value, detail);
 }
-%
 
 nArray.fn = nArray.prototype = {}
 
