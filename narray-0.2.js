@@ -3,11 +3,12 @@
  * nArray - JavaScript data management tools
  *
  * Copyright (c) 2016 Na Chao (https://github.com/nachao/nArray)
- * Dual licensed under the MIT (MIT-LICENSE.txt) 
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Dual licensed under the MIT (Lie to you ) 
+ * and not have GPL licenses.
  *
- * Date: 2016-01-10 02:07:00 -0002 (Sun, 10 Jan 2016)
- * Ver: 0.2
+ * Author: 'Na Chao'
+ * Date: 2016/1/11 10:40:26
+ * Ver: 0.2.8
  */
 
 function nArray( value, detail ){
@@ -16,11 +17,9 @@ function nArray( value, detail ){
 	if ( window == this )
 		return new nArray(value, detail);
 }
+%
 
-nArray.fn = nArray.prototype = {
-	version: '0.2',
-	author: 'Na Chao'
-}
+nArray.fn = nArray.prototype = {}
 
 nArray.extend = nArray.fn.extend = function ( obj, prop ) {
 	if ( !prop ) { prop = obj; obj = this; }
