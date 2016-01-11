@@ -8,13 +8,13 @@
 	"use strict";
 
 	// 将数组原型作为参数传入，进行初始化
-	return factory(target.constructor);
+	factory(target.constructor);
 
-}(Array, function ( array, n ) {
+}(Array, function ( array, undefined ) {
 	"use strict";
 
 	// 初始化申明
-	window.nArray = nArray = n;
+	function nArray () {}
 
 	nArray.fn = nArray.prototype = {}
 
@@ -31,7 +31,7 @@
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
 	function each( datas, fn ) {
-		var source = datas.constructor,
+		var source = datas ? datas.constructor : null,
 			result,
 			j;
 
@@ -146,6 +146,7 @@
 		定义功能方法
 	************************************/
 
+
 	// 扩展方法
 	nArray.extend = nArray.fn.extend = function ( obj, prop ) {
 		if ( !prop ) { prop = obj; obj = this; }
@@ -176,85 +177,46 @@
 
 		// 拆分条件字符串
 		mateResolve: function ( value ) {
+			var result = [];
 
 			// 如果没有需要解析的字符串，则返回空数组
-			if ( typeof value != 'string' )
-				return [];
-
-			var results = [],
-				result,
-				mode,
-				item,
-				many,
-				key,
-				val,
-				i,
-				j;
-
-			value = value.toString().split(',');
+			value = value ? value.toString().split(',') : [];
 
 			// 遍历全部条件
-			each(value, function(){
+			each(value, function(i, val){
+				var sign = nArray.mateInquiry(val),
+					item = val.split(sign),
+					key = item[0],
+					value = item[1];
 
+				if ( !sign && !value ) {
+					value = key || '';
+					key = '';
+				}
+
+				result = result.concat(nArray.mateCondition(key, value.split('|'), sign));
 			});
 
-				mode = '=';
-				item = value[i];
+			return result;
+		},
 
-				// 匹配对应的条件符号
-				for ( j=0; j<caseSign.length; j++ ) {
-					if ( item.indexOf(caseSign[j]) >= 0 ) {
-						mode = caseSign[j];
-						break;
-					}
+		// 判断字符串中是否有条件符号，如果有则返回
+		// @return {string}
+		mateInquiry: function ( value ) {
+			var result;
+
+			each(caseSign, function(i, sign){
+				if ( value.indexOf(sign) >= 0 ) {
+					result = sign;
+					return true;
 				}
+			})
 
-				item = item.split(mode);
+			return result;
+		},
 
-				// 键值
-				if ( item.length > 1 ) {
-					key = nArray.trim(item[0]);
-					val = nArray.trim(item[1]);
-				}
-				else {
-					key = null;
-					val = nArray.trim(item[0]);
-				}
-
-				// 一个条件对应多个值
-				if ( val.indexOf('|') >= 0 ) {
-					many = val.split('|');
-					result = [];
-					for ( k=0; k<many.length; k++ ) {
-						result.push({
-							key: key,
-							val: nArray.trim(many[k]),
-							mode: mode
-						});
-					}
-				}
-				else {
-
-					// 条件格式，及默认数据
-					result = {
-						key: key,
-						val: val == '*' ? '' : val,
-						mode: mode
-					};
-				}
-
-				if ( result.constructor == Array )
-					results = results.concat(result);
-				else
-					results.push(result);
-			}
-
-			return results;
-		}
-
-		// 拆分条件字符串
 		// 根据给出的一个主键、值和条件符号返回一个或多个对象
-		mateCondition: function ( key, value ) {
+		mateCondition: function ( key, value, mode ) {
 			var result = [];
 
 			if ( value.constructor != Array )
@@ -262,16 +224,46 @@
 
 			each(value, function(i, val){
 				result.push({
-					key: key,
+					key: key == '*' ? '' : key,
 					val: val == '*' ? '' : val,
-					mode: mode
-				})
+					mode: mode || '='
+				});
 			});
 
 			return result;
-		}
-	}
+		},
 
+
+
+		// 根据指定的：条件，数据，方式，是否完整匹配，进行深度匹配
+		mateEnter: function ( value, datas, method, whole ) {
+			var result = [];
+
+			// 判断是否为严格查询
+			if ( whole )
+				method = 'whole ' + method;
+
+			// 初始化查询路径
+			result.constructor.prototype.$path = [];
+
+			// 判断是否有数据
+			if ( datas )
+				nArray.mateDepth(method, value, datas, result);
+
+			return result;
+		},
+	});
+
+
+	/************************************
+		扩展目标
+	************************************/
+	nArray.extend(array, {
+		mateInquiry: nArray.mateInquiry
+	});
+
+
+	window.nArray = nArray;
 }));
 
 
@@ -474,19 +466,22 @@ nArray.extend({
 	// 	return results;
 	// },
 
-	// Loop all data, return the match result
-	mateFor: function (method, datas, parameter, whole ) {
-		var result = [],
-			params = nArray.mateResolve(parameter);
+	// // Loop all data, return the match result
+	// mateFor: function (method, value, datas, whole ) {
+	// 	var result = [];
 
-		// 初始化查询路径
-		result.constructor.prototype.$path = []
+	// 	// 判断是否为严格查询
+	// 	if ( whole )
+	// 		method = 'whole ' + method;
 
-		// 深度查询方式
-		nArray.mateDepth(method, params, datas, result);
+	// 	// 初始化查询路径
+	// 	result.constructor.prototype.$path = [];
 
-		return result;
-	},
+	// 	// 深度查询方式
+	// 	nArray.mateDepth(method, value, datas, result);
+
+	// 	return result;
+	// },
 
 	// Depth matching, return to the match to the data, as well as path.
 	// Return {array}
@@ -494,6 +489,9 @@ nArray.extend({
 		var path = [],
 			newKeys = [],
 			i;
+
+		// 获取条件数组
+		params = nArray.mateResolve(params);
 
 		if ( !paths )
 			paths = [];
@@ -641,27 +639,27 @@ nArray.extend({
 		return result;
 	},
 
-	// Whether the specified conditions are determined for the 'full match' data
-	mateFull: function ( datas, parameter, whole ) {
-		var method = 'full';
+	// // Whether the specified conditions are determined for the 'full match' data
+	// mateFull: function ( datas, parameter, whole ) {
+	// 	var method = 'full';
 
-		// 判断是否为严格查询
-		if ( whole )
-			method = 'whole ' + method;
+	// 	// 判断是否为严格查询
+	// 	if ( whole )
+	// 		method = 'whole ' + method;
 
-		return parameter ? nArray.mateFor(method, datas, parameter) : datas;
-	},
+	// 	return parameter ? nArray.mateFor(method, datas, parameter) : datas;
+	// },
 
-	// Whether the specified condition is a 'fuzzy match' of the data
-	mateSearch: function ( datas, parameter, whole ) {
-		var method = 'search';
+	// // Whether the specified condition is a 'fuzzy match' of the data
+	// mateSearch: function ( datas, parameter, whole ) {
+	// 	var method = 'search';
 
-		// 判断是否为严格搜索
-		if ( whole )
-			method = 'whole ' + method;
+	// 	// 判断是否为严格搜索
+	// 	if ( whole )
+	// 		method = 'whole ' + method;
 
-		return parameter ? nArray.mateFor(method, datas, parameter) : datas;
-	}
+	// 	return parameter ? nArray.mateFor(method, datas, parameter) : datas;
+	// }
 });
 
 // 对数据进行完整匹配查询，支持条件判断：<,>,>=,<=,=,!=

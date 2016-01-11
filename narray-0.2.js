@@ -262,13 +262,6 @@ nArray.extend({
 			for ( i=0; i<datas.length; i++ )
 				nArray.mateDepth(method, params, datas[i], result, path, newKeys, i);
 		}
-		else if ( nArray.mateData(method, params, datas) ) {
-			result.push(path[path.length-1]);
-				result.constructor.prototype.$path.push({
-					key: newKeys,
-					value: path
-				});
-		}
 	},
 
 	// According to the specified method, determine whether the data meet the conditions
