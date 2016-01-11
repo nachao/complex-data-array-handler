@@ -186,3 +186,6 @@ names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
 ```
 > 因为支持深度查询，所有为了更好的跟踪数据而提高的方法。
 > 此参数为一个数组，路径数据位置对应获取的数据位置。
+
+### 关联Array文档
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array
