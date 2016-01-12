@@ -160,23 +160,18 @@
 
 	nArray.extend({
 
-		// 更新数据
-		update: function ( data, value ) {
-			if ( typeof value != 'undefined' ) {
+		// 更新数组数据
+		update: function ( datas, value ) {
+			if ( typeof value != 'undefined' && datas.constructor == Array ) {
+				each(datas, function(i, data){
+					if ( 'object' == typeof value )
+						data = nArray.extend(data, value);
 
-				// 确保数据类型相同
-				if ( data.constructor == value.constructor ) {
-					if ( typeof value == 'object' ) {
-						nArray.each(value, function(i, val){
-							data[i] = val;
-						});
-					}
-					else {
-						data = value;
-					}
-				}
+					else if ( 'function' == typeof value && value.call(data, datas.$path[i]) )
+						data = nArray.extend(data, value.call(data, datas.$path[i]));
+				});
 			}
-			return data;
+			return datas;
 		},
 
 		// 对数据进行去重复处理（建议只用于非对象数据）
