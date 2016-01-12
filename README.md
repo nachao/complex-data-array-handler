@@ -111,53 +111,12 @@ names.$search('c');
 names.$search('name=c');	// 效果同上
 
 names.$search('remark=*');	// 效果同上，只查询有 remark 值的数据
+
+// 获取全部数据
+names.$search('*');
 ```
 
-### 3、数据内容抽取
-
-```javascript
-[].$fetch();
-```
-> 此方法只有在数据是数组或者对象的情况下有效。
-> 此方法返回新的数据。
-
-##### $fetch - 参数：
-```javascript
-@param {string} 需要抽出的键值，多个用 `,` 逗号隔开。
-@return {array} 去重复后的数据
-```
-
-##### $search - 实例（数据沿用 $get 的）：
-```javascript
-// 只输出 name 和 alias 两个值
-names.$fetch('name, alias');
-// -> [
-//		{"name":"Sunny","alias":"莎妮"},
-//		{"name":"Mary","alias":"玛丽"},
-//		{"name":"Crystal","alias":"克里丝塔"},
-//		{"name":"Cindy","alias":"辛迪"},
-//		{"name":"Betty","alias":"贝蒂"}
-//	]
-```
-
-### 4、数据去重复
-
-```javascript
-[].$unique();
-```
-> 此方法返回新的数据。
-
-##### $update - 参数（无参数）：
-```javascript
-@return {array} 去重复后的数据
-```
-
-##### $unique - 实例（数据沿用 $get 的）：
-```javascript
-figures.$get('>=3').$unique();  // [3, 3, 3, 4, 4, 5] -> [3, 4, 5]
-```
-
-### 5、数据批量更新
+### 3、数据批量更新
 
 ```javascript
 [].$update();
@@ -179,10 +138,10 @@ names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
 // 	]
 ```
 
-### 6、查看数据路径（唯一的属性）
+### 4、查看数据路径（唯一的属性）
 
 ```javascript
-[].$path();
+[].$path;
 ```
 > 因为支持深度查询，所有为了更好的跟踪数据而提高的方法。
 > 此参数为一个数组，路径数据位置对应获取的数据位置。
@@ -202,7 +161,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 #####变动：
 
-* 1、去除绑定到数组原型上的方法：$unique(去重复)、$fetch（提取需要的值），如果需要使用，可以在 nArray 上调用进行使用。
+* 1、移除绑定到数组原型上的方法：$unique(去重复)、$fetch（提取需要的值），如果需要使用，可以在 nArray 上调用进行使用。
 
 * 2、对使用到的方法，如果ES6中有的，则采用原生扩展方式，而非定义在 nArray上。包括：indexOf、keys、trim。
 
