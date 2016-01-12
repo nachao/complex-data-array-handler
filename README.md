@@ -7,9 +7,11 @@
 此方法返回新的数据。
 
 ##### $get - 参数：
-> @param {string} 获取条件，多个条件之间用 `,` 逗号隔开。一个条件由： 条件键 + 条件符号 + 匹配值。<br/>
-> @param {boolean} 是否必须满足全部条件，默认：false<br/>
-> @return {array}<br/>
+```javascript
+@param {string} 获取条件，多个条件之间用 `,` 逗号隔开。一个条件由： 条件键 + 条件符号 + 匹配值。
+@param {boolean} 是否必须满足全部条件，默认：false
+@return {array}
+```
 
 ##### $get - 参数说明：
 * 键：数据是对象或数组时有效，选填。
