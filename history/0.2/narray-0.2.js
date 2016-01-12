@@ -7,8 +7,8 @@
  * and not have GPL licenses.
  *
  * Author: 'Na Chao'
- * Date: 2016/1/11 10:40:26
- * Ver: 0.2.8
+ * Date: 2016/1/12 10:59:42
+ * Ver: 0.2.9
  */
 
 function nArray( value, detail ){
