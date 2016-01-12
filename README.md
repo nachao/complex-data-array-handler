@@ -155,7 +155,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 #####变动：
 
-* 1、移除绑定到数组原型上的方法：$unique(去重复)、$fetch（提取需要的值），如果需要使用，可以在 nArray 上调用进行使用。
+* 1、移除绑定到数组原型上的方法：$unique(去重复)、$fetch（提取需要的值），如果需要使用，可以在 nArray 上调用。
 
 * 2、对使用到的方法，如果ES6中有的，则采用原生扩展方式，而非定义在 nArray上。包括：indexOf、keys、trim。
 
