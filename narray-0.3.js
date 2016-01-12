@@ -342,7 +342,6 @@
 				if ( result && method.indexOf('whole') >= 0 )
 					result = ++rights == condition.length;
 
-
 				return result;
 			});
 
@@ -367,6 +366,10 @@
 				strValue = value ? value.toString().toLocaleLowerCase() : '',
 				strVal = param.val.toString().toLocaleLowerCase(),
 				numVal = !!Number(param.val) ? Number(param.val) : param.val;
+
+			// 对象或函数数据不能进行匹配
+			if ( ['object', 'function'].indexOf(typeof value) >= 0 )
+				return result;
 
 			switch ( param.mode ) {
 				case '=' :
