@@ -82,8 +82,6 @@ names.$get('id=1|2|5');			// 效果同上
 
 names.$get('id<3, id>4');		// 效果同上
 
-names.$get('id=1, en=Heywood, zh=爱默生');	// 效果同上
-
 // 传入数组查询
 var ids = [1, 2, 5];
 names.$get('id=' + ids.join('|'));	// 效果同上
