@@ -153,11 +153,6 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 <hr/>
 ###0.3 说明：
 
-#####优化：
-
-* 1、重构功能框架，实现一个对象管理前端全部数据，因为获取的数据只会是引用类型数据：对象、数据、函数。
-
-
 #####变动：
 
 * 1、移除绑定到数组原型上的方法：$unique(去重复)、$fetch（提取需要的值），如果需要使用，可以在 nArray 上调用进行使用。
