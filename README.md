@@ -28,54 +28,65 @@
 <script src="./narray.min-0.1.js"></script>
 
 // 不同类型的数据
-var figures = [1, 2, 2, 3, 3, 3, 4, 4, 5],
-    names = [
+var names = [
 		{
 			id: 1,
-			name: 'Sunny',
-			alias: '莎妮'
+			text: '人人为我,我为人人.',
+			name: {
+				en: 'Dumas pere',
+				zh: '大仲马'
+			}
 		},
 		{
 			id: 2,
-			name: 'Mary',
-			alias: '玛丽',
+			text: '手中的一只鸟胜于林中的两只鸟.',
+			name: {
+				en: 'Heywood',
+				zh: '希伍德'
+			}
 		},
 		{
 			id: 3,
-			name: 'Crystal',
-			alias: '克里丝塔',
-			remark: '冰雪聪明的'
+			text: '易得者亦易失.',
+			country: '[美]',
+			name: {
+				en: 'Hazlitt',
+				zh: '赫斯特'
+			}
 		},
 		{
 			id: 4,
-			name: 'Cindy',
-			alias: '辛迪',
-			remark: '甜美'
+			text: '时间就是金钱.',
+			country: '[美]',
+			name: {
+				en: 'Benjamin Franklin',
+				zh: '富兰克林'
+			}
 		},
 		{
 			id: 5,
-			name: 'Betty',
-			alias: '贝蒂'
+			text: '伟大的人物总是愿意当小人物的.',
+			name: {
+				en: 'R. W. Emerson',
+				zh: '爱默生'
+			}
 		}
     ];
 
-figures.$get('>3');	// -> [4, 4, 5]
 
-figures.$get('!=3');	// -> [1, 2, 2, 4, 4, 5]
-
-// 在对象数据中查询，以下几种方式结果一样
+// 以下几种方式结果一样
 names.$get('1, 2, 5');		
 // -> [
-//		{id: 1, name: 'Sunny', alias: '莎妮'},
-//		{id: 2, name: 'Mary', alias: '玛丽', }, 
-//		{id: 5, name: 'Betty', alias: '贝蒂'}
+//		{ id: 1, text: '人人为我,我为人人.', country: '[法]', name: {en: 'Dumas pere', zh: '大仲马'} },
+//		{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
+//		{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
 // 	]
 
 names.$get('id=1, id=2, id=5');	// 效果同上
 
-names.$get('id=1|2|5');		// 效果同上
+names.$get('id=1|2|5');			// 效果同上
 
-names.$get('id<3, id>4');	// 效果同上
+names.$get('id<3, id>4');		// 效果同上
 
 names.$get('id=1, name=Mary, alias=贝蒂');	// 效果同上
 
@@ -89,31 +100,24 @@ names.$get('id=' + ids.join('|'));	// 效果同上
 ```javascript
 [].$search();
 ```
-> $get 获取的数据为返回完全匹配条件值的数据。
-> 而 $search 则可以模糊搜索相关的数据，它的参数和 $get 的完全一样。
+> $get 为匹配条件获取数据，而 $search 为模糊搜索相关的数据，它的参数和 $get 的完全一样。
 > 此方法返回新的数据。
-
-##### $search - 参数（同 $get 相同）：
-```javascript
-@param {string} 获取条件，多个条件之间用 `,` 逗号隔开。一个条件由： 条件键 + 条件符号 + 匹配值。
-@param {boolean} 是否必须满足全部条件，默认：false
-@return {array}
 ```
 
 ##### $search - 实例（数据沿用 $get 的）：
 ```javascript
 // 以下几种 $search 获取的数据一样
-names.$search('c');
+names.$search('美');
 // -> [
-//		{id: 3, name: 'Crystal', alias: '克里丝塔', remark: '冰雪聪明的'}, 
-//		{id: 4, name: 'Cindy', alias: '辛迪', remark: '甜美'},
+//		{ id: 3, text: '易得者亦易失.', country: '[美]', name: {en: 'Hazlitt', zh: '赫斯特'} },
+//		{ id: 4, text: '时间就是金钱.', country: '[美]', name: {en: 'Benjamin Franklin', zh: '富兰克林 '} }
 // 	]
 
-names.$search('name=c');	// 效果同上
+names.$search('country=美');	// 效果同上
 
-names.$search('remark=*');	// 效果同上，只查询有 remark 值的数据
+names.$search('country=*');		// 效果同上，只查询有 country 值的数据
 
-// 获取全部数据
+// 获取全部对象类数据
 names.$search('*');
 ```
 
@@ -132,10 +136,10 @@ names.$search('*');
 
 ##### $update - 实例（数据沿用 $get 的）：
 ```javascript
-names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
+names.$get('id=2|5').$update({ country: '[美]' });
 // -> [
-//		{id: 1, name: 'Zara', alias: '赞拉'},
-//		{id: 5, name: 'Zara', alias: '赞拉'}
+//		{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', country: '[美]', name: {en: 'Heywood', zh: '希伍德'} },
+//		{ id: 5, text: '伟大的人物总是愿意当小人物的.', country: '[美]', name: {en: 'R. W. Emerson', zh: '爱默生'} }
 // 	]
 ```
 
@@ -143,6 +147,34 @@ names.$get('id=1|5').$update({ name: 'Zara', alias: '赞拉' });
 
 ```javascript
 [].$path;
+```
+
+##### $path - 实例（数据沿用 $get 的）：
+```javascript
+console.log( names.$search('希伍德').$path );
+// -> [
+//		{
+//			key: [ 1, 'name' ],		// 此为内容深度查询中的对应key值
+//			value: [
+//				[
+//					{ id: 1, text: '人人为我,我为人人.', name: {en: 'Dumas pere', zh: '大仲马'} },
+//					{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
+//					{ id: 3, text: '易得者亦易失.', country: '[美]', name: {en: 'Hazlitt', zh: '赫斯特'} },
+//					{ id: 4, text: '时间就是金钱.', country: '[美]', name: {en: 'Benjamin Franklin', zh: '富兰克林'} },
+//					{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
+//				],
+//				{ 
+//					id: 2, 
+//					text: '手中的一只鸟胜于林中的两只鸟.',
+//					name: {en: 'Heywood', zh: '希伍德'}
+//				},
+//				{
+//					en: 'Heywood',
+//					zh: '希伍德'
+//				}
+//			]
+//		}
+// 	]
 ```
 > 因为支持深度查询，所有为了更好的跟踪数据而提高的方法。
 > 此参数为一个数组，路径数据位置对应获取的数据位置。
