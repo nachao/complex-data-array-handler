@@ -287,7 +287,7 @@
 				newPaths.push(datas);
 
 				// 判断当前值是否满足给定的条件，满足则保存数据返回值，以及对应的路径数据
-				if ( nArray.mateCondition(method, datas, condition) ) {
+				if ( datas && nArray.mateCondition(method, datas, condition) ) {
 					result.push(newPaths[newPaths.length-1]);
 					result.constructor.prototype.$path.push({
 						key: newKeys,
