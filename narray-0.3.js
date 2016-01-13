@@ -282,12 +282,12 @@
 			nArray.extend(newPaths, paths || []);
 
 			// 匹配对象类型数据
-			if ( [Function, Object, Array].indexOf(datas.constructor) > -1 ) {
+			if ( datas && [Function, Object, Array].indexOf(datas.constructor) > -1 ) {
 				typeof key != 'undefined' && newKeys.push(key);
 				newPaths.push(datas);
 
 				// 判断当前值是否满足给定的条件，满足则保存数据返回值，以及对应的路径数据
-				if ( datas && nArray.mateCondition(method, datas, condition) ) {
+				if ( nArray.mateCondition(method, datas, condition) ) {
 					result.push(newPaths[newPaths.length-1]);
 					result.constructor.prototype.$path.push({
 						key: newKeys,
