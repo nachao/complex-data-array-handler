@@ -198,7 +198,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 * 1、功能小提示，非数组数据使用 [ ] 包裹数据后便可使用功能。
 
-* 2、可实现一个对象变量管理前端全部数据，因为获取的数据只会是引用类型数据：对象、数据、函数。
+* 2、数据树管理：可实现一个对象变量管理前端全部数据。
 
 
 
