@@ -30,21 +30,12 @@
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
 	function each( datas, fn ) {
-		var source = datas ? datas.constructor : null,
-			result,
+		var result,
 			j;
 
-		if ( source == Object ) {
-			for ( j in datas )
-				if ( result = fn(j, datas[j]) )
-					break;
-		}
-
-		if ( source == Array ) {
-			for ( j=0; j<datas.length; j++ )
-				if ( result = fn(j, datas[j]) )
-					break;
-		}
+		for ( j in datas )
+			if ( datas.hasOwnProperty(j) && (result = fn(j, datas[j]) ) )
+				break;
 
 		return !!result;
 	}
@@ -359,8 +350,7 @@
 		mateValues: function ( value, param, method ) {
 			var result = false,
 				strValue = value ? value.toString().toLocaleLowerCase() : '',
-				strVal = param.val.toString().toLocaleLowerCase(),
-				numVal = !!Number(param.val) ? Number(param.val) : param.val;
+				strVal = param.val.toString().toLocaleLowerCase();
 
 			// 对象或函数数据不能进行匹配
 			if ( ['object', 'function'].indexOf(typeof value) >= 0 )
@@ -379,21 +369,8 @@
 						strValue !== strVal;
 					break;
 
-				case '>' :
-					result = value > numVal; 
-					break;
-
-				case '>=' :
-					result = value >= numVal;
-					break;
-
-				case '<' :
-					result = value < numVal;
-					break;
-
-				case '<=' :
-					result = value <= numVal;
-					break;
+				default :
+					result = eval('"' + value + '"' + param.mode + '"' + param.val + '"'); 
 			}
 
 			return result;
