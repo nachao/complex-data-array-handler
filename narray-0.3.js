@@ -13,9 +13,9 @@
 	"use strict";
 
 	// 初始化申明
-	function nArray () {}
+	function NArray () {}
 
-	nArray.fn = nArray.prototype = {};
+	NArray.fn = NArray.prototype = {};
 
 	var 
 
@@ -138,7 +138,7 @@
 
 
 	// 扩展方法
-	nArray.extend = nArray.fn.extend = function ( target, source ) {
+	NArray.extend = NArray.fn.extend = function ( target, source ) {
 		if ( !source ) { 
 			source = target; 
 			target = this; 
@@ -149,17 +149,17 @@
 		return target;
 	};
 
-	nArray.extend({
+	NArray.extend({
 
 		// 更新数组数据
 		update: function ( datas, value ) {
 			if ( typeof value != 'undefined' && datas.constructor == Array ) {
 				each(datas, function(i, data){
 					if ( 'object' == typeof value )
-						data = nArray.extend(data, value);
+						NArray.extend(data, value);
 
 					else if ( 'function' == typeof value && value.call(data, datas.$path[i]) )
-						data = nArray.extend(data, value.call(data, datas.$path[i]));
+						NArray.extend(data, value.call(data, datas.$path[i]));
 				});
 			}
 			return datas;
@@ -186,7 +186,7 @@
 
 			// 遍历全部条件
 			each(value, function(i, val){
-				var sign = nArray.getInquiry(val),
+				var sign = NArray.getInquiry(val),
 					item = val.split(sign),
 					key = item[0],
 					value = item[1];
@@ -196,7 +196,7 @@
 					key = '';
 				}
 
-				result = result.concat(nArray.getCondition(key, value.split('|'), sign));
+				result = result.concat(NArray.getCondition(key, value.split('|'), sign));
 			});
 
 			return result;
@@ -205,14 +205,14 @@
 		// 判断字符串中是否有条件符号，如果有则返回
 		// @return {string}
 		getInquiry: function ( value ) {
-			var result;
+			var result = '';
 
 			each(caseSign, function(i, sign){
 				if ( value.indexOf(sign) >= 0 ) {
 					result = sign;
 					return true;
 				}
-			})
+			});
 
 			return result;
 		},
@@ -257,7 +257,7 @@
 
 			// 判断是否有数据
 			if ( datas )
-				nArray.mateDepth(method, value, datas, result);
+				NArray.mateDepth(method, value, datas, result);
 
 			return result;
 		},
@@ -269,8 +269,8 @@
 				newKeys = [];
 
 			// 初始化路径数据
-			nArray.extend(newKeys, keys || []);
-			nArray.extend(newPaths, paths || []);
+			NArray.extend(newKeys, keys || []);
+			NArray.extend(newPaths, paths || []);
 
 			// 匹配对象类型数据
 			if ( datas && [Function, Object, Array].indexOf(datas.constructor) > -1 ) {
@@ -278,7 +278,7 @@
 				newPaths.push(datas);
 
 				// 判断当前值是否满足给定的条件，满足则保存数据返回值，以及对应的路径数据
-				if ( nArray.mateCondition(method, datas, condition) ) {
+				if ( NArray.mateCondition(method, datas, condition) ) {
 					result.push(newPaths[newPaths.length-1]);
 					result.constructor.prototype.$path.push({
 						key: newKeys,
@@ -288,7 +288,7 @@
 
 				// 递归所有对象类型（数组和对象）数据
 				each(datas, function(key, data){
-					nArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
+					NArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
 				});
 			}
 		},
@@ -300,7 +300,7 @@
 				rights = 0;
 
 			// 获取条件数组数据
-			condition = nArray.parseCondition(condition);
+			condition = NArray.parseCondition(condition);
 
 			// 循环所以条件
 			each(condition, function(i, param){
@@ -308,20 +308,20 @@
 				// 条件有主键，被查询数据是对象类型数据
 				if ( param.key && typeof datas == 'object' ) {
 					each(datas, function(key, data){
-						return result = nArray.mateKeys(key, param, method) && nArray.mateValues(data, param, method);
+						return result = NArray.mateKeys(key, param, method) && NArray.mateValues(data, param, method);
 					});
 				}
 
 				// 如果数据没有键值
 				else if ( !param.key && typeof datas == 'object' ) {
 					each(datas, function(i, data){
-						return result = nArray.mateValues(data, param, method);
+						return result = NArray.mateValues(data, param, method);
 					});
 				}
 
 				// 其他情况，直接匹配值
 				else {
-					result = nArray.mateValues(datas, param, method);
+					result = NArray.mateValues(datas, param, method);
 				}
 
 				// 判断是否为多条件严格匹配
@@ -382,26 +382,26 @@
 	/************************************
 		扩展目标
 	************************************/
-	nArray.extend(array, {
+	NArray.extend(array, {
 
 		// 匹配查询
 		$get: function ( value, whole ) {
-			return nArray.mateEnter(this, value, 'get', whole);
+			return NArray.mateEnter(this, value, 'get', whole);
 		},
 
 		// 模糊查询
 		$search: function ( value, whole ) {
-			return nArray.mateEnter(this, value, 'search', whole);
+			return NArray.mateEnter(this, value, 'search', whole);
 		},
 
 		// 对数据进行批量修改或扩展
 		$update: function ( value ) {
-			return nArray.update(this, value);
+			return NArray.update(this, value);
 		},
 
 		// 查询结果的路径
 		$path: []
 	});
 
-	window.nArray = nArray;
+	window.nArray = NArray;
 }));
