@@ -30,21 +30,12 @@
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
 	function each( datas, fn ) {
-		var source = datas ? datas.constructor : null,
-			result,
+		var result,
 			j;
 
-		if ( source == Object ) {
-			for ( j in datas )
-				if ( result = fn(j, datas[j]) )
-					break;
-		}
-
-		if ( source == Array ) {
-			for ( j=0; j<datas.length; j++ )
-				if ( result = fn(j, datas[j]) )
-					break;
-		}
+		for ( j in datas )
+			if ( datas.hasOwnProperty(j) && (result = fn(j, datas[j]) ) )
+				break;
 
 		return !!result;
 	}
