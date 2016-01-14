@@ -359,8 +359,7 @@
 		mateValues: function ( value, param, method ) {
 			var result = false,
 				strValue = value ? value.toString().toLocaleLowerCase() : '',
-				strVal = param.val.toString().toLocaleLowerCase(),
-				numVal = !!Number(param.val) ? Number(param.val) : param.val;
+				strVal = param.val.toString().toLocaleLowerCase();
 
 			// 对象或函数数据不能进行匹配
 			if ( ['object', 'function'].indexOf(typeof value) >= 0 )
@@ -379,21 +378,8 @@
 						strValue !== strVal;
 					break;
 
-				case '>' :
-					result = value > numVal; 
-					break;
-
-				case '>=' :
-					result = value >= numVal;
-					break;
-
-				case '<' :
-					result = value < numVal;
-					break;
-
-				case '<=' :
-					result = value <= numVal;
-					break;
+				default :
+					result = eval('"' + value + '"' + param.mode + '"' + param.val + '"'); 
 			}
 
 			return result;
