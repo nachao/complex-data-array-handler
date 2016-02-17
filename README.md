@@ -189,7 +189,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 * 3、优化了部分代码，删除了重复内容。
 
-* 4、因为采用必报是封装功能，压缩后的文件更小了。
+* 4、采用闭包封装功能，压缩后的文件更小了。
 
 * 5、优化了 $path 属性，当前 key 的数组值于 value 的数组值更具对应关系。
 
