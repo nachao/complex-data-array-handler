@@ -353,7 +353,8 @@
 				strVal = param.val.toString().toLocaleLowerCase();
 
 			// 对象或函数数据不能进行匹配
-			if ( ['object', 'function'].indexOf(typeof value) >= 0 )
+			// 如果数据内容的值为 null，则按照空字符串来匹配
+			if ( ['object', 'function'].indexOf(typeof value) >= 0 && value != null )
 				return result;
 
 			switch ( param.mode ) {
