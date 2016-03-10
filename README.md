@@ -200,6 +200,3 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 * 2、数据树管理：可实现一个对象变量管理前端全部数据。
 
-
-
-
