@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.3
+//! version : 0.4
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
