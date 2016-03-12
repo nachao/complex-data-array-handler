@@ -244,6 +244,7 @@
 				if ( typeof val == 'string' )
 					val = val.trim();
 
+				// 初始化条件格式和值
 				result.push({
 					key: 	cond.key == '*' ?
 								'' :
@@ -274,7 +275,7 @@
 			var result = [];
 
 			// 如果没有需要解析的字符串，则返回空数组
-			var values = cond ? cond.toString().split(',') : [];
+			var values = cond ? cond.toString().split(',') : [''];
 
 			// 遍历全部条件
 			each(values, function(i, value){
