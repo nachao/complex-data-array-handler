@@ -180,15 +180,13 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 #####操作：
 
-* 1、添加新的查看格式：详细查询，之前的字符串查询方式任然可用。和之前不同的是，之前传入的是字符串，现在可以传入对象数组，详细使用见下面的示例。（重要）
+* 1、添加新的查看格式：详细查询（之前的字符串查询方式任然可用），之前查询条件传入的是字符串，现在可以传入对象数组，详细使用见下面的示例。
 
 #####优化：
-
 * 2、优化开发版的注释以及代码的优化和简化；
 
 
-
-#####示例：
+#####详细查询参数说明：
 ```javascipt
 [
 	{
@@ -203,32 +201,149 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 	}
 ]
 
-// 参数说明：以下参数全部为选填。
-
+// 以下参数全部为选填。
 @param {string} key = 指定键值；
-@param {*} value = 标准查询（$get）的话，则需要指定值；模糊查询（$search）的话，只需输入相关的值即可；
-@param {string} mode = 指定查询方式，包括：'==', '!=', '>', '>=', '<', '<='。默认为 '=='；
-@param {boolean} enable = 是否此条件生效，推荐使用场景：在框架中查询数据时根据指定开关键来查询。默认为 true；
-@param {boolean} strict = 是否严格查询。默认为 false；
+@param {*} value = 查询内容值；
+@param {string} mode = 指定查询方式，包括：'==', '!=', '>', '>=', '<', '<='，默认为 '=='；
+@param {boolean} enable = 是否生效此条件，方便更新查询条件，默认为 true；
+@param {boolean} strict = 是否严格查询，默认为 false；
+```
 
-// 严格查询（strict）参数示例：
-var test0_4 = [{ k1:null }, { k2: undefined }, { k3: 1 }, { k4: '1' }, { k5: true } , { k6: false }, { k7: '' }];
+##### strict（是否严格查询）参数使用示例：
+```javascipt
+// 申明测试数据
+var test0_4 = [
+		{
+			name: null, 
+			sn: 't01'
+		},
+		{
+			name: undefined,
+			sn: 't02'
+		}, 
+		{
+			name: 1,
+			sn: 't03'
+		}, 
+		{ 
+			name: '1',
+			sn: 't04'
+		}, 
+		{ 
+			name: true,
+			sn: 't05'
+		}, 
+		{ 
+			name: false,
+			sn: 't06'
+		}, 
+		{ 
+			name: '',
+			sn: 't07'
+		}
+	];
 
 // 查询特殊值：null
-test0_4 .$get({ value: null });
+// 普通查询（会转换类型匹配）
+test0_4 .$get([
+	{ value: null }
+]);
 // 或
 test0_4 .$get('');
 
---> [{"k1":null},{k2:undefined},{"k6":false},{"k7":""}];
+--> [
+		{name: null, sn: 't01'},
+		{name: undefined, sn: 't02'},
+		{name: false, sn: 't06'},
+		{name: '', sn: 't07'}
+	];
 
-// 以上为普通查询，是无法匹配到对应的数据类型。
-// 精确的查询特殊值：null 和 1（数字）
-test0_4 .$get({ value: null, strict: true });
+// 精确查询
+test0_4 .$get([
+	{ value: null, strict: true }
+]);
 
---> [{"k1":null}];
+--> [
+		{name: null, sn: 't01'}
+	];
 
-// 精确的查询特殊值：1（数字），在普通查询中是会把字符串 1 给查询出来的。
-test0_4 .$get({ value: 1, strict: true });
+// 查询对比：1（数字）。
+// 普通查询
+test0_4 .$get([
+	{ value: 1, strict: false }
+]);
+// 等同于
+test0_4 .$get([
+	{ value: 1 }
+]);
+// 等同于
+test0_4 .$get('1');
 
---> [{"3":1 }];
+--> [
+		{name: 1, sn: 't03'},
+		{name: '1', sn: 't04'}
+	];
+
+// 精确查询
+test0_4 .$get([
+	{ value: 1, strict: true }
+]);
+
+--> [
+		{name: 1, sn: 't03'}
+	];
+```
+
+##### enable（是否生效此条件）参数使用示例：
+```javascipt
+// 多条件查询：'1', true,
+test0_4 .$get([
+	{ value: '1' },
+	{ value: true }
+]);
+
+--> [
+		{name: 1, sn: 't03'},
+		{name: '1', sn: 't04'},
+		{name: true, sn: 't05'}
+	];
+
+// 不启用第一个条件
+test0_4 .$get([
+	{ value: '1', enable: false }, 
+	{ value: true }
+]);
+
+--> [
+		{name: true, sn: 't05'}
+	];
+```
+
+##### 组合条件查询（补充）：
+```javascipt
+// 此功能之前是一直支持，在此再补充说明下：
+
+// 组合条件查询，必须满足：name = 1, sn: 't04' 的数据。
+// 普通查询（遍历数据，只要数据中满足任何一个条件则返回此数据）
+test0_4 .$get([
+	{ value: 1 },
+	{ value: 't04' }
+]);
+
+// 返回值中包含了 sn = 't03' 的数据。
+--> [
+		{name: 1, sn: 't03'},
+		{name: '1', sn: 't04'},
+	];
+
+// 组合查询（遍历数据，只要数据中必须满足全部条件则返回此数据）
+// 使用方式很简单，执行给出给二个参数为：true 即可（默认为：false）。
+test0_4 .$get([
+	{ value: 1 },
+	{ value: 't04' }
+], true);
+
+--> [
+		{name: '1', sn: 't04'},
+	];
 ```

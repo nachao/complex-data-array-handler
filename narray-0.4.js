@@ -245,11 +245,19 @@
 					val = val.trim();
 
 				result.push({
-					key: cond.key == '*' ? '' : cond.key,
-					val: val == '*' ? '' : val,
-					mode: cond.mode || '==',
-					enable: cond.enable || true,
-					strict: cond.strict || false
+					key: 	cond.key == '*' ?
+								'' :
+								cond.key,
+					val: 	val == '*' ?
+								'' :
+								val,
+					mode: 	cond.mode ||
+								'==',
+					enable: typeof cond.enable == 'boolean' ?
+								cond.enable :
+								true,
+					strict: cond.strict ||
+								false
 				});
 			});
 
@@ -455,6 +463,10 @@
 				dataValue = dataValue ? dataValue.toString().toLocaleLowerCase() : '';
 				condVal = condVal ? condVal.toString().toLocaleLowerCase() : '';
 			}
+
+			// 是否生效
+			if ( !cond.enable )
+				return result;
 
 			// 对象或函数数据不能进行匹配
 			// 如果数据内容的值为 null，则按照空字符串来匹配
