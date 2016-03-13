@@ -243,13 +243,18 @@ var test0_4 = [
 		}
 	];
 
+
+// 例子一：
 // 查询特殊值：null
-// 普通查询（会转换类型匹配）
+
+// 以下采用两种查询方式：
+// 1、普通方式（字符串式）
+test0_4 .$get('null');
+
+// 2、详细方式（对象式，条件值任然会被转换类型，如：null == undefined、null == false、null == ''）：
 test0_4 .$get([
 	{ value: null }
 ]);
-// 或
-test0_4 .$get('');
 
 --> [
 		{name: null, sn: 't01'},
@@ -258,7 +263,7 @@ test0_4 .$get('');
 		{name: '', sn: 't07'}
 	];
 
-// 精确查询
+// 修改2、详细方式为 “严格查询”
 test0_4 .$get([
 	{ value: null, strict: true }
 ]);
@@ -267,32 +272,34 @@ test0_4 .$get([
 		{name: null, sn: 't01'}
 	];
 
-// 查询对比：1（数字）。
-// 普通查询
+
+// 例子二：
+// 查询对比：name 为 1（数字）的数据。
+
+// 1、普通方式
+test0_4 .$get('name=1');
+
+// 2、详细方式
 test0_4 .$get([
-	{ value: 1, strict: false }
+	{ key: 'name', value: 1 }
 ]);
-// 等同于
-test0_4 .$get([
-	{ value: 1 }
-]);
-// 等同于
-test0_4 .$get('1');
 
 --> [
 		{name: 1, sn: 't03'},
 		{name: '1', sn: 't04'}
 	];
 
-// 精确查询
+// 修改2、详细方式为严格查询
 test0_4 .$get([
-	{ value: 1, strict: true }
+	{ key: 'name', value: 1, strict: true }
 ]);
 
 --> [
 		{name: 1, sn: 't03'}
 	];
 ```
+
+>通过以上可以看出普通查询（字符串查询）是无法区分数据类型的，因此就可以使用详细方式查询。
 
 ##### enable（是否生效此条件）参数使用示例：
 ```javascipt
