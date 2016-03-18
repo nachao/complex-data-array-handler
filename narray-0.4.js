@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4
+//! version : 0.4/60318/5
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = '0.4.60318';
+	NArray.version = 0.4/60318/5;
 
 	var 
 
@@ -465,8 +465,15 @@
 
 			// 如果是普通匹配，则将数据值和条件值都转换为字符串，其转换为小写
 			if ( !cond.strict ) {
-				dataValue = dataValue ? dataValue.toString().toLocaleLowerCase() : dataValue;
-				condVal = condVal ? condVal.toString().toLocaleLowerCase() : condVal;
+				dataValue = dataValue ? dataValue.toString().toLocaleLowerCase() : dataValue.toString();
+				condVal = condVal ? condVal.toString().toLocaleLowerCase() : condVal.toString();
+
+			// 如果是严格模式，对被查询的数据进行处理
+			} else {
+
+				// 如果是模糊查询，则强行将查询数据转换为字符串
+				if ( method == 'search' )
+					dataValue = JSON.stringify(dataValue);
 			}
 
 			// 是否生效
