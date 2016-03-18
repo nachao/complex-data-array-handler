@@ -212,7 +212,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 ##### strict（是否严格查询）参数使用示例：
 ```javascipt
 // 申明测试数据
-var test0_4 = [
+var t04_1 = [
 		{
 			name: null, 
 			sn: 't01'
@@ -249,22 +249,20 @@ var test0_4 = [
 
 // 以下采用两种查询方式：
 // 1、普通方式（字符串式）
-test0_4 .$get('null');
+t04_1.$get('null');
 
-// 2、详细方式（对象式，条件值任然会被转换类型，如：null == undefined、null == false、null == ''）：
-test0_4 .$get([
+// 2、详细方式（对象式，条件值任然会被转换类型，如：null == undefined）：
+t04_1.$get([
 	{ value: null }
 ]);
 
 --> [
 		{name: null, sn: 't01'},
-		{name: undefined, sn: 't02'},
-		{name: false, sn: 't06'},
-		{name: '', sn: 't07'}
+		{name: undefined, sn: 't02'}
 	];
 
 // 修改2、详细方式为 “严格查询”
-test0_4 .$get([
+t04_1.$get([
 	{ value: null, strict: true }
 ]);
 
@@ -277,10 +275,10 @@ test0_4 .$get([
 // 查询对比：name 为 1（数字）的数据。
 
 // 1、普通方式
-test0_4 .$get('name=1');
+t04_1.$get('name=1');
 
 // 2、详细方式
-test0_4 .$get([
+t04_1.$get([
 	{ key: 'name', value: 1 }
 ]);
 
@@ -290,7 +288,7 @@ test0_4 .$get([
 	];
 
 // 修改2、详细方式为严格查询
-test0_4 .$get([
+t04_1.$get([
 	{ key: 'name', value: 1, strict: true }
 ]);
 
@@ -304,7 +302,7 @@ test0_4 .$get([
 ##### enable（是否生效此条件）参数使用示例：
 ```javascipt
 // 多条件查询：'1', true,
-test0_4 .$get([
+t04_1.$get([
 	{ value: '1' },
 	{ value: true }
 ]);
@@ -316,7 +314,7 @@ test0_4 .$get([
 	];
 
 // 不启用第一个条件
-test0_4 .$get([
+t04_1.$get([
 	{ value: '1', enable: false }, 
 	{ value: true }
 ]);
@@ -332,8 +330,8 @@ test0_4 .$get([
 
 // 组合条件查询，必须满足：name = 1, sn: 't04' 的数据。
 // 普通查询（遍历数据，只要数据中满足任何一个条件则返回此数据）
-test0_4 .$get([
-	{ value: 1 },
+t04_1.$get([
+	{ value: '1' },
 	{ value: 't04' }
 ]);
 
@@ -345,8 +343,8 @@ test0_4 .$get([
 
 // 组合查询（遍历数据，只要数据中必须满足全部条件则返回此数据）
 // 使用方式很简单，执行给出给二个参数为：true 即可（默认为：false）。
-test0_4 .$get([
-	{ value: 1 },
+t04_1.$get([
+	{ value: '1' },
 	{ value: 't04' }
 ], true);
 
