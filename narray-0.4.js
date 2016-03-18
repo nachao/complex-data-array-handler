@@ -197,7 +197,7 @@
 		 * @return {string}
 		 **/
 		getInquiry: function ( value ) {
-			var result = '';
+			var result = '==';
 
 			if ( value ) {
 				each(caseSign, function(i, sign){
@@ -289,7 +289,7 @@
 					val = item[1];
 
 				// 在没有条件符号的情况下，则匹配全部键值
-				if ( !mode && !val ) {
+				if ( !val ) {
 					val = key || '';
 					key = '';
 				}
