@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = '0.4.60312';
+	NArray.version = '0.4.60318';
 
 	var 
 
