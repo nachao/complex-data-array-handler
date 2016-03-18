@@ -15,7 +15,11 @@
 	// 初始化申明
 	function NArray () {}
 
+	// 初始化原型
 	NArray.fn = NArray.prototype = {};
+
+	// 备注版本
+	NArray.version = '0.4.60312';
 
 	var 
 
@@ -461,8 +465,8 @@
 
 			// 如果是普通匹配，则将数据值和条件值都转换为字符串，其转换为小写
 			if ( !cond.strict ) {
-				dataValue = dataValue ? dataValue.toString().toLocaleLowerCase() : '';
-				condVal = condVal ? condVal.toString().toLocaleLowerCase() : '';
+				dataValue = dataValue ? dataValue.toString().toLocaleLowerCase() : dataValue;
+				condVal = condVal ? condVal.toString().toLocaleLowerCase() : condVal;
 			}
 
 			// 是否生效
@@ -478,7 +482,7 @@
 				case '=' :
 				case '==' :
 					result = method.indexOf('get') >= 0 ?
-						dataValue === condVal :
+						( cond.strict ? dataValue === condVal : dataValue == condVal ) :
 						dataValue.indexOf(condVal) >= 0;
 					break;
 
