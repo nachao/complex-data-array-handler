@@ -210,6 +210,22 @@
 
 			return result;
 		},
+ 
+		/**
+		 * 如果是快速（字符串）匹配，则将数据值和条件值都转换为字符串，其转换为小写；
+		 * 以及处理特殊数据为空字符串
+		 *
+		 * @param {*} value = 判断此值是否在匹配符号中，选填
+		 * @return {string}
+		 **/
+		setSpecialValue: function ( value ) {
+			var result = '';
+
+			if ( value !== null && value !== undefined )
+				result = value.toString().toLocaleLowerCase();
+
+			return result;
+		},
 
 		/**
 		 * 遍历条件
@@ -227,43 +243,50 @@
 		 * @return {array}
 		 **/
 		eachCondition: function ( cond ) {
-			var result = [];
+			var result = [],
+				array = [];
 
-			// 如果是字符串类型
-			if ( typeof cond.value == 'string' )
-				cond.value = cond.value.split('|');	// 转换为数组格式
+			// 处理字符串类型判断是否有多个值
+			if ( !!cond.value && typeof cond.value == 'string' )
+				array = cond.value.split('|');	// 转换为数组格式
 
-			// 其他非数组类型
+			// 处理空值或非数组
 			else if ( !cond.value || cond.value.constructor != Array ) {
-				cond.value = [cond.value];			// 转换为数组格式
+				array = [cond.value];			// 转换为数组格式
 			}
 
 			// 遍历全部此条件，处理一个条件对应多个值的情况
-			each(cond.value, function(i, val){
+			each(array, function(i, val){
 
-				// 格式化字符串
-				if ( typeof cond.key == 'string' )
-					cond.key = cond.key.trim();
+				// 设置格式和默认值
+				var rule = {
+						key: cond.key || '',
+						val: val,
+						mode: cond.mode || '==',
+						enable: typeof cond.enable == 'boolean' ? cond.enable : true,	// 是否启用，默认：true
+						strict: cond.strict || false									// 是否严格匹配，默认：false
+					};
 
-				if ( typeof val == 'string' )
-					val = val.trim();
+				// 处理特殊字符
+				if ( rule.key == '*' )
+					rule.key = '';
+
+				if ( rule.val == '*' )
+					rule.val = '';
+
+				// 格式化字符串（去空格）
+				if ( typeof rule.key == 'string' )
+					rule.key = rule.key.trim();
+
+				if ( typeof rule.val == 'string' )
+					rule.val = rule.val.trim();
+
+				// 快速（字符串）查询时，如果将条件值为：空值（null、undefined）、布尔值（false）、数值（0）转换为空字符
+				if ( !rule.strict )
+					rule.val = rule.val || '';
 
 				// 初始化条件格式和值
-				result.push({
-					key: 	cond.key == '*' ?
-								'' :
-								cond.key,
-					val: 	val == '*' ?
-								'' :
-								val,
-					mode: 	cond.mode ||
-								'==',
-					enable: typeof cond.enable == 'boolean' ?
-								cond.enable :
-								true,
-					strict: cond.strict ||
-								false
-				});
+				result.push(rule);
 			});
 
 			return result;
@@ -276,30 +299,27 @@
 		 * @return {array}
 		 **/
 		parseByString: function ( cond ) {
-			var result = [];
-
-			// 如果没有需要解析的字符串，则返回空数组
-			var values = cond ? cond.toString().split(',') : [''];
+			var result = [],
+				array = cond ? cond.toString().split(',') : [''];	// 如果没有需要解析的字符串，则返回带一个空字符串的数组
 
 			// 遍历全部条件
-			each(values, function(i, value){
+			each(array, function(i, value){
 				var mode = NArray.getInquiry(value),
 					item = value.split(mode),
-					key = item[0],
-					val = item[1];
+					cond = {
+						key: item[0], 
+						value: item[1], 
+						mode: mode
+					};
 
 				// 在没有条件符号的情况下，则匹配全部键值
-				if ( !val ) {
-					val = key || '';
-					key = '';
+				if ( !cond.value ) {
+					cond.value = cond.key || '';
+					cond.key = '';
 				}
 
 				// 遍历和初始条件参数
-				result = result.concat(NArray.eachCondition({
-					key: key, 
-					value: val.split('|'), 
-					mode: mode
-				}));
+				result = result.concat(NArray.eachCondition(cond));
 			});
 
 			return result;
@@ -312,14 +332,15 @@
 		 * @return {array}
 		 **/
 		parseByObject: function ( value ) {
-			var result = [];
+			var result = [],
+				array = value;
 
 			// 如果条件为单个对象，则将其转换为数组
-			if ( value.constructor == Object )
-				value = [value];
+			if ( array.constructor !== Array )
+				array = [value];
 
 			// 遍历全部条件
-			each(value, function(i, val){
+			each(array, function(i, val){
 				result = result.concat(NArray.eachCondition(val));
 			});
 
@@ -332,11 +353,13 @@
 		parseCondition: function ( value ) {
 			var result = [];
 
-			// 字符串条件
-			if ( typeof value == 'string' )
+			// 字符串查询条件解析方式，包括类型：字符串、数字、布尔、空值（null、undefined）
+			if ( ['string', 'boolean', 'number'].indexOf(typeof value) >= 0 || value === null || value === undefined ) {
+				value = NArray.setSpecialValue(value);	// 将非字符串类型，转换为字符串
 				result = NArray.parseByString(value);
+			}
 
-			// 详细对象数组条件
+			// 详细（对象、对象数组）查询条件解析方式
 			else if ( value.constructor == Array || value.constructor == Object ) {
 				result = NArray.parseByObject(value);
 			}
@@ -365,6 +388,9 @@
 
 			// 初始化查询路径
 			result.constructor.prototype.$path = [];
+
+			// 判断和解析条件
+			value = NArray.parseCondition(value);
 
 			// 判断是否有数据
 			if ( datas )
@@ -409,9 +435,6 @@
 		mateCondition: function ( method, datas, condition ) {
 			var result = false,
 				rights = 0;
-
-			// 获取条件数组数据
-			condition = NArray.parseCondition(condition);
 
 			// 循环所以条件
 			each(condition, function(i, param){
@@ -459,21 +482,19 @@
 		// 根据条件，判断值是否匹配
 		// Return {boolean}
 		mateValues: function ( value, cond, method ) {
-			var result = false,
-				dataValue = value,
-				condVal = cond.val;
+			var result = false;
 
-			// 如果是普通匹配，则将数据值和条件值都转换为字符串，其转换为小写
+			// 如果是普通（字符串快速）匹配，则对数据进行处理（确保是小写的字符串内容）
 			if ( !cond.strict ) {
-				dataValue = dataValue ? dataValue.toString().toLocaleLowerCase() : dataValue.toString();
-				condVal = condVal ? condVal.toString().toLocaleLowerCase() : condVal.toString();
+				value = NArray.setSpecialValue(value);
+				cond.val = NArray.setSpecialValue(cond.val);
 
 			// 如果是严格模式，对被查询的数据进行处理
 			} else {
 
 				// 如果是模糊查询，则强行将查询数据转换为字符串
 				if ( method == 'search' )
-					dataValue = JSON.stringify(dataValue);
+					value = JSON.stringify(value);
 			}
 
 			// 是否生效
@@ -489,14 +510,14 @@
 				case '=' :
 				case '==' :
 					result = method.indexOf('get') >= 0 ?
-						( cond.strict ? dataValue === condVal : dataValue == condVal ) :
-						dataValue.indexOf(condVal) >= 0;
+						( cond.strict ? value === cond.val : value == cond.val ) :
+						value.indexOf(cond.val) >= 0;
 					break;
 
 				case '!=' :
 					result = method.indexOf('search') >= 0 ?
-						dataValue.indexOf(condVal) < 0 :
-						dataValue !== condVal;
+						value.indexOf(cond.val) < 0 :
+						value !== cond.val;
 					break;
 
 				default :
