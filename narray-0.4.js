@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/60318/5
+//! version : 0.4/60323/1
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/60318/5;
+	NArray.version = 0.4/60323/1;
 
 	var 
 
