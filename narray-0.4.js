@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/60323/1
+//! version : 0.4/60330/1
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/60323/1;
+	NArray.version = 0.4/60330/1;
 
 	var 
 
@@ -313,7 +313,7 @@
 					};
 
 				// 在没有条件符号的情况下，则匹配全部键值
-				if ( !cond.value ) {
+				if ( typeof cond.value == 'undefined' ) {
 					cond.value = cond.key || '';
 					cond.key = '';
 				}
@@ -554,5 +554,5 @@
 		$path: []
 	});
 
-	window.nArray = NArray;
+	// window.nArray = NArray;
 }));
