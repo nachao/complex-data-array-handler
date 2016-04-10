@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/60409/1
+//! version : 0.4/60410/10
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/60409/1;
+	NArray.version = 0.4/60410/10;
 
 	var 
 
@@ -424,7 +424,7 @@
 				}
 
 				// 递归所有对象类型（数组和对象）数据
-				$.each(JSON.parse(JSON.stringify(datas)), function( i, data ){
+				each(JSON.parse(JSON.stringify(datas)), function( i, data ){
 					NArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
 				});
 			}
