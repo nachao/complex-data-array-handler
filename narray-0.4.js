@@ -41,25 +41,15 @@
 
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
-	function each( obj, callback ) {
-		var length, i = 0;
+	function each( datas, fn ) {
+		var result,
+			j;
 
-		if ( obj.constructor == Array ) {
-			length = obj.length;
-			for ( ; i < length; i++ ) {
-				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
-					break;
-				}
-			}
-		} else {
-			for ( i in obj ) {
-				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
-					break;
-				}
-			}
-		}
+		for ( j in datas )
+			if ( datas.hasOwnProperty(j) && (result = fn(j, datas[j]) ) )
+				break;
 
-		return obj;
+		return !!result;
 	}
 
 
