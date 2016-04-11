@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/60410/10
+//! version : 0.4/60411/11
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/60410/10;
+	NArray.version = 0.4/60411/11
 
 	var 
 
@@ -42,14 +42,24 @@
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
 	function each( datas, fn ) {
-		var result,
-			j;
+		var length, i = 0;
 
-		for ( j in datas )
-			if ( datas.hasOwnProperty(j) && (result = fn(j, datas[j]) ) )
-				break;
+		if ( obj.constructor == Array ) {
+			length = obj.length;
+			for ( ; i < length; i++ ) {
+				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
+					break;
+				}
+			}
+		} else {
+			for ( i in obj ) {
+				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
+					break;
+				}
+			}
+		}
 
-		return !!result;
+		return obj;
 	}
 
 
@@ -424,7 +434,7 @@
 				}
 
 				// 递归所有对象类型（数组和对象）数据
-				each(JSON.parse(JSON.stringify(datas)), function( i, data ){
+				each(datas, function( i, data ){
 					NArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
 				});
 			}
