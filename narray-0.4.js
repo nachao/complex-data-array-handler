@@ -41,7 +41,7 @@
 
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
-	function each( datas, fn ) {
+	function each( obj, callback ) {
 		var length, i = 0;
 
 		if ( obj.constructor == Array ) {
