@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/60412/12
+//! version : 0.4/60413/13
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/60412/12
+	NArray.version = 0.4/60413/13
 
 	var 
 
@@ -41,7 +41,7 @@
 
 	// 遍历数组或对象元素，回调返回 true 则终止循环
 	// @return {boolean}
-	function each( datas, fn ) {
+	function each( datas, fn, t ) {
 		var log = [],
 			result,
 			j;
@@ -50,7 +50,8 @@
 			if ( datas.hasOwnProperty(j) && log.indexOf(datas[j]) < 0 && (result = fn(j, datas[j]) ) )
 				break;
 
-			log.push(datas[j]);
+			if ( typeof datas[j] == 'object' )
+				log.push(datas[j]);
 		}
 
 		return !!result;
