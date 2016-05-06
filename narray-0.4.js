@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/60413/13
+//! version : 0.4/600506/1
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,12 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/60413/13
+	NArray.version = 0.4/600506/1;
+
+	// 性能记录
+	NArray.log = {
+		cycles: 0
+	};
 
 	var 
 
@@ -47,6 +52,8 @@
 			j;
 
 		for ( j in datas ) {
+			NArray.log.cycles += 1;
+
 			if ( datas.hasOwnProperty(j) && log.indexOf(datas[j]) < 0 && (result = fn(j, datas[j]) ) )
 				break;
 
@@ -148,20 +155,54 @@
 		};
 	}
 
+	// ES 15.2.3.6 Object.defineProperty ( O, P, Attributes )
+	// Partial support for most common case - getters, setters, and values
+	(function() {
+		if (!Object.defineProperty || !(function () {try {Object.defineProperty({}, 'x', {}); return true; } catch (e) {return false; } }()) ) {
+			var orig = Object.defineProperty;
+			Object.defineProperty = function (o, properties, desc) {
+
+				// In IE8 try built-in implementation for defining properties on DOM prototypes.
+				if (orig) {try {return orig(o, prop, desc); } catch (e) {} }
+
+				if (o !== Object(o)) {
+					throw TypeError("Object.defineProperty called on non-object");
+				}
+				if (Object.prototype.__defineGetter__ && ('get' in desc)) {
+					Object.prototype.__defineGetter__.call(o, prop, desc.get);
+				}
+				if (Object.prototype.__defineSetter__ && ('set' in desc)) {
+					Object.prototype.__defineSetter__.call(o, prop, desc.set);
+				}
+				if ('value' in desc) {
+					o[prop] = desc.value;
+				}
+				return o;
+			};
+		}
+	}());
+
 
 	/************************************
 		定义功能方法
 	************************************/
 
 
-	// 扩展方法
+	// 扩展方法，绑定是新属性均为不可枚举
 	NArray.extend = NArray.fn.extend = function ( target, source ) {
 		if ( !source ) { 
 			source = target; 
 			target = this; 
 		}
-		each(source, function(i, item){
-			target[i] = item;
+		each(source, function(key, value){
+
+			// 使用数据描述符创建对象数据，主用用于定义为不可枚举
+			Object.defineProperty(target, key, {
+				configurable: true,
+				enumerable: target.propertyIsEnumerable(key),	// 如果之前是可枚举的，则保持可枚举状态
+				writable: true,
+				value: value,
+			});
 		});
 		return target;
 	};
@@ -380,7 +421,7 @@
 		 *  支持条件：
 		 *  <,>,>=,<=,=,!=
 		 **/
-		mateEnter: function ( datas, value, method, whole ) {
+		mateEnter: function ( datas, condition, method, whole ) {
 			var result = [];
 
 			// 判断是否为严格查询
@@ -394,12 +435,15 @@
 			// 初始化查询路径
 			result.constructor.prototype.$path = [];
 
+			// 记录循环次数
+			NArray.log.cycles = 0;
+
 			// 判断和解析条件
-			value = NArray.parseCondition(value);
+			condition = NArray.parseCondition(condition);
 
 			// 判断是否有数据
 			if ( datas )
-				NArray.mateDepth(method, value, datas, result);
+				NArray.mateDepth(method, condition, datas, result);
 
 			return result;
 		},
@@ -447,7 +491,7 @@
 				// 条件有主键，被查询数据是对象类型数据
 				if ( param.key && typeof datas == 'object' ) {
 					each(datas, function(key, data){
-						return result = NArray.mateKeys(key, param, method) && NArray.mateValues(data, param, method);
+						return result = (NArray.mateKeys(key, param, method) && NArray.mateValues(data, param, method));
 					});
 				}
 
@@ -559,5 +603,7 @@
 		$path: []
 	});
 
-	// window.nArray = NArray;
+	// 如果是浏览器，则输出到全局变量
+	if ( window )
+		window.nArray = NArray;
 }));

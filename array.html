@@ -9,6 +9,31 @@
 	<body>
 		<script>
 
+			/*
+				性能声明：此功能是原生map循环的5、6倍时长；是原生for循环40倍；
+
+				0.5 改动：
+
+				1、将着重针对性能进行优化；
+
+				2、部分方法无法使用，例如 update；
+
+				3、兼容性处理机制差；
+
+
+			*/
+
+
+			for ( var i=0; i<3; i++ ) {
+				console.log('i', i);
+                for ( var j=0; j<3; j++ ) {
+					console.log('j', j);
+					break;
+                }
+				break;
+            }
+
+
 			var names = [
 				{
 					id: 1,
@@ -113,6 +138,127 @@
 			// t2.$get(2);
 
 			// t2.$get(true);
+
+
+			var t3 = [{"has_refri_economizer":0,"t_evap_idx":null,"type_stage_comp":0,"num_comp":"1","num_wp_wc_oc":0,"num_wt_wc_oc":0,"has_gas_liquid_separator":0,"comp":[],"watertower":[],"waterpump":[],"has_comprack":0,"num_comprack":0,"comprack":[]}];
+
+			for ( var j=0; j<1000; j++ ) {
+				t3[0].comp.push({"type_comp":j,"has_economizer":0,"t_middle":null,"p_middle":null,"type_oc":0,"has_process_cooler":1,"t_evap_idx_pc":null});
+			}
+
+			var t4 = [{"system":{"sys_info":{"sys_name":"VENDOR20160504-7(VENDOR20160504-7)","sys_type":"1001","sys_status":1},"main_sys":{"params":[{"parameter_id":"3174","display_name":"\u5ba4\u5916\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3175","display_name":"\u6bcf\u65e5\u5e73\u5747\u5ba4\u6e29","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3176","display_name":"\u7cfb\u7edf\u603b\u7535\u91cf","para_type":"5","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3177","display_name":"\u7cfb\u7edf\u65e5\u7535\u91cf","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3178","display_name":"\u7cfb\u7edf\u603b\u529f\u7387","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3179","display_name":"\u7d2f\u8ba1\u5236\u70ed\u91cf","para_type":"5","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0}],"sub_sys":[{"evapSys":[{"params":[{"parameter_id":"3048","display_name":"\u84b8\u53d1\u6e29\u5ea6","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3049","display_name":"\u84b8\u53d1\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3050","display_name":"#1\u51b7\u95f4\u6e29\u5ea6#1","para_type":"1","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3051","display_name":"#1\u51b7\u95f4\u6e7f\u5ea6#1","para_type":"6","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3052","display_name":"#1\u51b7\u95f4\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3053","display_name":"#1\u51b7\u95f4\u878d\u971c\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3054","display_name":"#1\u51b7\u95f4\u4f9b\u6db2\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3055","display_name":"#1\u51b7\u95f4\u98ce\u673a\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3056","display_name":"#1\u51b7\u95f4#1\u84b8\u53d1\u5668\u98ce\u673a\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3057","display_name":"#1\u51b7\u95f4#1\u84b8\u53d1\u5668\u98ce\u673a\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3058","display_name":"#1\u51b7\u95f4#1\u84b8\u53d1\u5668\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3059","display_name":"#1\u51b7\u95f4#1\u84b8\u53d1\u5668\u4f9b\u6db2\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3060","display_name":"#1\u51b7\u95f4#1\u84b8\u53d1\u5668\u878d\u971c\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3061","display_name":"#1\u51b7\u95f4#1\u84b8\u53d1\u5668\u7535\u878d\u971c\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3062","display_name":"#1\u51b7\u95f4#2\u84b8\u53d1\u5668\u98ce\u673a\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3063","display_name":"#1\u51b7\u95f4#2\u84b8\u53d1\u5668\u98ce\u673a\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3064","display_name":"#1\u51b7\u95f4#2\u84b8\u53d1\u5668\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3065","display_name":"#1\u51b7\u95f4#2\u84b8\u53d1\u5668\u4f9b\u6db2\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3066","display_name":"#1\u51b7\u95f4#2\u84b8\u53d1\u5668\u878d\u971c\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3067","display_name":"#1\u51b7\u95f4#2\u84b8\u53d1\u5668\u7535\u878d\u971c\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3068","display_name":"#2\u51b7\u95f4\u6e29\u5ea6#1","para_type":"1","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3069","display_name":"#2\u51b7\u95f4\u6e7f\u5ea6#1","para_type":"6","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3070","display_name":"#2\u51b7\u95f4\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3071","display_name":"#2\u51b7\u95f4\u878d\u971c\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3072","display_name":"#2\u51b7\u95f4\u4f9b\u6db2\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3073","display_name":"#2\u51b7\u95f4\u98ce\u673a\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3074","display_name":"#2\u51b7\u95f4#1\u84b8\u53d1\u5668\u98ce\u673a\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3075","display_name":"#2\u51b7\u95f4#1\u84b8\u53d1\u5668\u98ce\u673a\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3076","display_name":"#2\u51b7\u95f4#1\u84b8\u53d1\u5668\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3077","display_name":"#2\u51b7\u95f4#1\u84b8\u53d1\u5668\u4f9b\u6db2\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3078","display_name":"#2\u51b7\u95f4#1\u84b8\u53d1\u5668\u878d\u971c\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3079","display_name":"#2\u51b7\u95f4#1\u84b8\u53d1\u5668\u7535\u878d\u971c\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3080","display_name":"#2\u51b7\u95f4#2\u84b8\u53d1\u5668\u98ce\u673a\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3081","display_name":"#2\u51b7\u95f4#2\u84b8\u53d1\u5668\u98ce\u673a\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3082","display_name":"#2\u51b7\u95f4#2\u84b8\u53d1\u5668\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3083","display_name":"#2\u51b7\u95f4#2\u84b8\u53d1\u5668\u4f9b\u6db2\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3084","display_name":"#2\u51b7\u95f4#2\u84b8\u53d1\u5668\u878d\u971c\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3085","display_name":"#2\u51b7\u95f4#2\u84b8\u53d1\u5668\u7535\u878d\u971c\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3086","display_name":"#3\u51b7\u95f4\u6e29\u5ea6#1","para_type":"1","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3087","display_name":"#3\u51b7\u95f4\u6e7f\u5ea6#1","para_type":"6","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3088","display_name":"#3\u51b7\u95f4\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3089","display_name":"#3\u51b7\u95f4\u878d\u971c\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3090","display_name":"#3\u51b7\u95f4\u4f9b\u6db2\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3091","display_name":"#3\u51b7\u95f4\u98ce\u673a\u603b\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3092","display_name":"#3\u51b7\u95f4#1\u84b8\u53d1\u5668\u98ce\u673a\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3093","display_name":"#3\u51b7\u95f4#1\u84b8\u53d1\u5668\u98ce\u673a\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3094","display_name":"#3\u51b7\u95f4#1\u84b8\u53d1\u5668\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3095","display_name":"#3\u51b7\u95f4#1\u84b8\u53d1\u5668\u4f9b\u6db2\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3096","display_name":"#3\u51b7\u95f4#1\u84b8\u53d1\u5668\u878d\u971c\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3097","display_name":"#3\u51b7\u95f4#1\u84b8\u53d1\u5668\u7535\u878d\u971c\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3098","display_name":"#3\u51b7\u95f4#2\u84b8\u53d1\u5668\u98ce\u673a\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3099","display_name":"#3\u51b7\u95f4#2\u84b8\u53d1\u5668\u98ce\u673a\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3100","display_name":"#3\u51b7\u95f4#2\u84b8\u53d1\u5668\u878d\u971c\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3101","display_name":"#3\u51b7\u95f4#2\u84b8\u53d1\u5668\u4f9b\u6db2\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3102","display_name":"#3\u51b7\u95f4#2\u84b8\u53d1\u5668\u878d\u971c\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3103","display_name":"#3\u51b7\u95f4#2\u84b8\u53d1\u5668\u7535\u878d\u971c\u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0}],"index":"1","display_name":"#1\u84b8\u53d1\u7cfb\u7edf"}],"compSys":[{"params":[{"parameter_id":"3104","display_name":"\u5438\u6c14\u538b\u529b\uff08\u516c\u5171\uff09","para_type":"2","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3105","display_name":"\u6392\u6c14\u538b\u529b\uff08\u516c\u5171\uff09","para_type":"2","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3106","display_name":"\u5438\u6c14\u6e29\u5ea6\uff08\u516c\u5171\uff09","para_type":"1","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3107","display_name":"\u6392\u6c14\u6e29\u5ea6\uff08\u516c\u5171\uff09","para_type":"1","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3108","display_name":"\u5438\u6c14\u8fc7\u70ed\u5ea6\uff08\u516c\u5171\uff09","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3109","display_name":"\u6392\u6c14\u8fc7\u70ed\u5ea6 ( \u516c\u5171)","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3110","display_name":"\u7535\u6e90\u7f3a\u76f8\u4fdd\u62a4\u62a5\u8b66\uff08\u516c\u5171\uff09","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3111","display_name":"#1\u538b\u7f29\u673a \u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3112","display_name":"#1\u538b\u7f29\u673a \u5438\u6c14\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3113","display_name":"#1\u538b\u7f29\u673a \u6392\u6c14\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3114","display_name":"#1\u538b\u7f29\u673a \u5438\u6c14\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3115","display_name":"#1\u538b\u7f29\u673a \u6392\u6c14\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3116","display_name":"#1\u538b\u7f29\u673a \u603b\u7535\u91cf","para_type":"5","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3117","display_name":"#1\u538b\u7f29\u673a \u7535\u6d41","para_type":"7","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3118","display_name":"#1\u538b\u7f29\u673a \u529f\u7387","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3119","display_name":"#1\u538b\u7f29\u673a \u55b7\u6db2\u51b7\u5374\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3120","display_name":"#1\u538b\u7f29\u673a \u6cb9\u52a0\u70ed\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3121","display_name":"#1\u538b\u7f29\u673a \u4f9b\u6cb9\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3122","display_name":"#1\u538b\u7f29\u673a \u7d2f\u8ba1\u8fd0\u884c\u65f6\u95f4","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3123","display_name":"#1\u538b\u7f29\u673a \u81ea\u4fdd\u62a4\u6a21\u5757\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3124","display_name":"#1\u538b\u7f29\u673a \u4f4e\u538b\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3125","display_name":"#1\u538b\u7f29\u673a \u9ad8\u538b\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3126","display_name":"#1\u538b\u7f29\u673a \u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3127","display_name":"#1\u538b\u7f29\u673a \u8d85\u6e29\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3128","display_name":"#1\u538b\u7f29\u673a \u4f4e\u6cb9\u4f4d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3129","display_name":"#1\u538b\u7f29\u673a \u6cb9\u538b\u5dee\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3130","display_name":"#1\u538b\u7f29\u673a \u6cb9\u6d41\u91cf\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3131","display_name":"#2\u538b\u7f29\u673a \u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3132","display_name":"#2\u538b\u7f29\u673a \u5438\u6c14\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3133","display_name":"#2\u538b\u7f29\u673a \u6392\u6c14\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3134","display_name":"#2\u538b\u7f29\u673a \u5438\u6c14\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3135","display_name":"#2\u538b\u7f29\u673a \u6392\u6c14\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3136","display_name":"#2\u538b\u7f29\u673a \u603b\u7535\u91cf","para_type":"5","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3137","display_name":"#2\u538b\u7f29\u673a \u7535\u6d41","para_type":"7","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3138","display_name":"#2\u538b\u7f29\u673a \u529f\u7387","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3139","display_name":"#2\u538b\u7f29\u673a \u55b7\u6db2\u51b7\u5374\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3140","display_name":"#2\u538b\u7f29\u673a \u6cb9\u52a0\u70ed\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3141","display_name":"#2\u538b\u7f29\u673a \u4f9b\u6cb9\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3142","display_name":"#2\u538b\u7f29\u673a \u7d2f\u8ba1\u8fd0\u884c\u65f6\u95f4","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3143","display_name":"#2\u538b\u7f29\u673a \u81ea\u4fdd\u62a4\u6a21\u5757\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3144","display_name":"#2\u538b\u7f29\u673a \u4f4e\u538b\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3145","display_name":"#2\u538b\u7f29\u673a \u9ad8\u538b\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3146","display_name":"#2\u538b\u7f29\u673a \u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3147","display_name":"#2\u538b\u7f29\u673a \u8d85\u6e29\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3148","display_name":"#2\u538b\u7f29\u673a \u4f4e\u6cb9\u4f4d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3149","display_name":"#2\u538b\u7f29\u673a \u6cb9\u538b\u5dee\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3150","display_name":"#2\u538b\u7f29\u673a \u6cb9\u6d41\u91cf\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3151","display_name":"#3\u538b\u7f29\u673a \u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3152","display_name":"#3\u538b\u7f29\u673a \u5438\u6c14\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3153","display_name":"#3\u538b\u7f29\u673a \u6392\u6c14\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3154","display_name":"#3\u538b\u7f29\u673a \u5438\u6c14\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3155","display_name":"#3\u538b\u7f29\u673a \u6392\u6c14\u6e29\u5ea6","para_type":"1","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3156","display_name":"#3\u538b\u7f29\u673a \u603b\u7535\u91cf","para_type":"5","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3157","display_name":"#3\u538b\u7f29\u673a \u7535\u6d41","para_type":"7","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3158","display_name":"#3\u538b\u7f29\u673a \u529f\u7387","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3159","display_name":"#3\u538b\u7f29\u673a \u55b7\u6db2\u51b7\u5374\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3160","display_name":"#3\u538b\u7f29\u673a \u6cb9\u52a0\u70ed\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3161","display_name":"#3\u538b\u7f29\u673a \u4f9b\u6cb9\u5f00\u5173","para_type":"3","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3162","display_name":"#3\u538b\u7f29\u673a \u7d2f\u8ba1\u8fd0\u884c\u65f6\u95f4","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3163","display_name":"#3\u538b\u7f29\u673a \u81ea\u4fdd\u62a4\u6a21\u5757\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3164","display_name":"#3\u538b\u7f29\u673a \u4f4e\u538b\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3165","display_name":"#3\u538b\u7f29\u673a \u9ad8\u538b\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3166","display_name":"#3\u538b\u7f29\u673a \u8fc7\u8f7d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3167","display_name":"#3\u538b\u7f29\u673a \u8d85\u6e29\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3168","display_name":"#3\u538b\u7f29\u673a \u4f4e\u6cb9\u4f4d\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3169","display_name":"#3\u538b\u7f29\u673a \u6cb9\u538b\u5dee\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3170","display_name":"#3\u538b\u7f29\u673a \u6cb9\u6d41\u91cf\u62a5\u8b66","para_type":"4","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0}],"index":"1","display_name":"#1\u538b\u7f29\u7cfb\u7edf"}],"condSys":[{"params":[{"parameter_id":"3171","display_name":"\u51b7\u51dd\u6e29\u5ea6","para_type":"0","signal_type":null,"monitoring_status":"0","bx_index":0,"plc_index":0},{"parameter_id":"3172","display_name":"\u51b7\u51dd\u538b\u529b","para_type":"2","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0},{"parameter_id":"3173","display_name":"\u51b7\u51dd\u6e29\u5dee","para_type":"0","signal_type":null,"monitoring_status":"1","bx_index":0,"plc_index":0}],"index":"1","display_name":"\u51b7\u51dd\u7cfb\u7edf"}],"display_name":"","index":"0"}],"display_name":"\u603b\u7cfb\u7edf"},"hardware_info":{"bx_monitor":[{"bx_index":"1","bx_slave_id":"1","bx_plc_commu_type":"1"}],"plc":[{"plc_index":"1","plc_slave_id":"2","connect_bx":[{"bx_index":"1"}]}]}}}];
+
+
+			function go(){
+
+
+				// na 速度
+				var start, end;
+
+
+				console.log('原生 for------------------------------');
+
+				console.log(start = new Date().getTime());
+
+				for ( var i=0; i<t3.comp.length; i++ ) {
+					t3.comp[i].has_process_cooler = Math.random() * i;
+				}
+
+				console.log(end = new Date().getTime(), end - start);
+				console.log('用时ms:' + ( end - start ));
+
+
+				console.log('封装 for------------------------------');
+
+				function useFor ( datas, callback ) {
+					if ( datas.constructor == Array ) {
+						for ( var i=0; i<datas.length; i++ )
+							if ( callback( datas[i], i ) )
+								break;
+					}
+					else {
+						for ( var key in datas )
+							if ( callback( datas[key], key ) )
+								break;
+					}
+				}
+
+				console.log(start = new Date().getTime());
+
+				useFor(t3.comp, function( data, index ){
+					if ( index > 10000 )
+						return true;
+					data.has_process_cooler = Math.random() * index;
+				});
+
+				console.log(end = new Date().getTime(), end - start);
+				console.log('用时ms:' + ( end - start ));
+
+
+				console.log('原生 map------------------------------');
+
+				console.log(start = new Date().getTime());
+
+				t3.comp.map(function( data, index ){
+					data.has_process_cooler = Math.random() * index;
+				});
+
+				console.log(end = new Date().getTime(), end - start);
+				console.log('用时ms:' + ( end - start ));
+
+
+				console.log('na------------------------------');
+
+				console.log(start = new Date().getTime());
+
+				t3.comp.$search('has_process_cooler=*').$update('has_process_cooler=2');
+
+				console.log(end = new Date().getTime());
+				console.log('用时ms:' + ( end - start ));
+
+
+
+
+
+
+
+
+
+
+
+				console.log(t3.comp);
+
+			}
+
+
+			// 查看指定系统
+			// start = new Date().getTime();
+			// var ttt = [t4].$get('parameter_id=3144');
+			// end = new Date().getTime();
+
+			// console.log('用时ms:' + ( end - start ), ttt.length, ttt);
+
+
+			goTime(function(){
+				console.log(t3.$get('type_comp=1'), t3);
+			}, '10个值的计算');
+
+			goTime(function(){
+				console.log( t4.$get('parameter_id=3144').$update({signal_type: 1}) );
+			});
+
+
+
+
+			// 获取执行时长
+			function goTime( callback, msg ){
+				console.log('-----------------', msg || '')
+				var start = new Date().getTime();
+				callback();
+				var end = new Date().getTime();
+				console.log('用时ms:' + ( end - start ));
+			}
+
 
 
 
