@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.4/600506/1
+//! version : 0.5/600510/1
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.4/600506/1;
+	NArray.version = 0.5/600510/1;
 
 	// 性能记录
 	NArray.log = {
@@ -135,7 +135,6 @@
 		};
 	}
 
-	// 兼容那些没有原生支持Object.key方法的JavaScript环境。
 	if (!Object.keys) {
 		Object.keys = function(o) {
 			if (o !== Object(o)) 
@@ -148,7 +147,6 @@
 		}
 	}
 
-	// 如果浏览器本身不支持String对象的trim方法,那么运行下面的代码可以兼容这些环境.
 	if (!String.prototype.trim) {
 		String.prototype.trim = function() {
 			return this.replace(/^\s+|\s+$/g, '');
@@ -182,6 +180,31 @@
 		}
 	}());
 
+	if (!Object.assign) {
+		Object.defineProperty(Object, "assign", {
+			enumerable: false,
+			configurable: true,
+			writable: true,
+			value: function(target, firstSource) {
+				"use strict";
+				if (target === undefined || target === null) throw new TypeError("Cannot convert first argument to object");
+				var to = Object(target);
+				for (var i = 1; i < arguments.length; i++) {
+					var nextSource = arguments[i];
+					if (nextSource === undefined || nextSource === null) continue;
+					var keysArray = Object.keys(Object(nextSource));
+					for (var nextIndex = 0,
+					len = keysArray.length; nextIndex < len; nextIndex++) {
+						var nextKey = keysArray[nextIndex];
+						var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+						if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
+					}
+				}
+				return to;
+			}
+		});
+	}
+
 
 	/************************************
 		定义功能方法
@@ -211,13 +234,13 @@
 
 		// 更新数组数据
 		update: function ( datas, value ) {
-			if ( typeof value != 'undefined' && datas.constructor == Array ) {
+			if ( typeof value != 'undefined' && datas.constructor === Array ) {
 				each(datas, function(i, data){
 					if ( 'object' == typeof value )
-						NArray.extend(data, value);
+						Object.assign(data, value);
 
 					else if ( 'function' == typeof value && value.call(data, datas.$path[i]) )
-						NArray.extend(data, value.call(data, datas.$path[i]));
+						Object.assign(data, value.call(data, datas.$path[i]));
 				});
 			}
 			return datas;
@@ -228,7 +251,7 @@
 			var result = [];
 
 			each(datas, function(i, data){
-				if ( result.indexOf(JSON.stringify(data)) < 0 )
+				if ( result.indexOf(data) < 0 )
 					result.push(data);
 			});
 
@@ -451,16 +474,15 @@
 		// 深度查询数据，如果数据的值是对象类型，则递归调用
 		// Return {array}
 		mateDepth: function ( method, condition, datas, result, paths, keys, key ) {
-			var newPaths = [],
-				newKeys = [];
-
-			// 初始化路径数据
-			NArray.extend(newKeys, keys || []);
-			NArray.extend(newPaths, paths || []);
+			var newPaths = Object.assign([], paths),
+				newKeys = Object.assign([], keys);
 
 			// 匹配对象类型数据
 			if ( datas && [Function, Object, Array].indexOf(datas.constructor) > -1 ) {
-				typeof key != 'undefined' && newKeys.push(key);
+				if ( typeof key != 'undefined' ) {
+					newKeys.push(key);
+				}
+
 				newPaths.push(datas);
 
 				// 判断当前值是否满足给定的条件，满足则保存数据返回值，以及对应的路径数据
@@ -473,7 +495,7 @@
 				}
 
 				// 递归所有对象类型（数组和对象）数据
-				each(datas, function( i, data ){
+				each(datas, function( key, data ){
 					NArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
 				});
 			}
