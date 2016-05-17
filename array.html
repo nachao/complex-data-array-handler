@@ -3,21 +3,12 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>nArray 前端数据管理工具</title>
-		<!-- <script src="./narray.min-0.4.js"></script> -->
-		<script src="./narray-0.4.js"></script>
+		<!-- <script src="./narray.min-0.5.js"></script> -->
+		<script src="./narray-0.5.js"></script>
+		<script src="./data/t1.js"></script>
 	</head>
 	<body>
 		<script>
-
-			for ( var i=0; i<3; i++ ) {
-				console.log('i', i);
-                for ( var j=0; j<3; j++ ) {
-					console.log('j', j);
-					break;
-                }
-				break;
-            }
-
 
 			var names = [
 				{
@@ -124,112 +115,63 @@
 
 			// t2.$get(true);
 
+			function test () {
 
-			var t3 = [{"has_refri_economizer":0,"t_evap_idx":null,"type_stage_comp":0,"num_comp":"1","num_wp_wc_oc":0,"num_wt_wc_oc":0,"has_gas_liquid_separator":0,"comp":[],"watertower":[],"waterpump":[],"has_comprack":0,"num_comprack":0,"comprack":[]}];
+				var t3 = [];
 
-			for ( var j=0; j<1000; j++ ) {
-				t3[0].comp.push({"type_comp":j,"has_economizer":0,"t_middle":null,"p_middle":null,"type_oc":0,"has_process_cooler":1,"t_evap_idx_pc":null});
-			}
-
-
-			function go(){
-
-
-				// na 速度
-				var start, end;
-
-
-				console.log('原生 for------------------------------');
-
-				console.log(start = new Date().getTime());
-
-				for ( var i=0; i<t3.comp.length; i++ ) {
-					t3.comp[i].has_process_cooler = Math.random() * i;
+				// 指定数据集
+				for ( var j=0; j<10000; j++ ) {
+					t3.push({
+						value :j
+					});
 				}
 
-				console.log(end = new Date().getTime(), end - start);
-				console.log('用时ms:' + ( end - start ));
+				// -----------------------------------------
+				goTime(function(){
+					for ( var i=0; i<t3.length; i++ ) {
+						t3[i].value = Math.random();
+					}
+				}, '原生 for');
 
-
-				console.log('封装 for------------------------------');
-
-				function useFor ( datas, callback ) {
-					if ( datas.constructor == Array ) {
+				// -----------------------------------------
+				goTime(function(){
+					function useFor ( datas, callback ) {
 						for ( var i=0; i<datas.length; i++ )
 							if ( callback( datas[i], i ) )
 								break;
 					}
-					else {
-						for ( var key in datas )
-							if ( callback( datas[key], key ) )
-								break;
-					}
+					useFor(t3, function( data, i ){
+						data.value = Math.random();
+					});
+				}, '封装 for');
+
+				// -----------------------------------------
+				goTime(function(){
+					t3.map(function( data, index ){
+						data.value = Math.random();
+					});
+				}, '原生 map');
+
+				// -----------------------------------------
+				goTime(function(){
+					t3.$search('value=*');//.$update({ value: 0 });
+				}, 'nArray');
+
+				// -----------------------------------------
+				// console.log(t3);
+
+				// 获取执行时长
+				function goTime( callback, msg ){
+					console.log('-----------------', msg || '')
+					var start = new Date().getTime();
+					callback();
+					var end = new Date().getTime();
+					console.log('用时ms:' + ( end - start ));
 				}
 
-				console.log(start = new Date().getTime());
-
-				useFor(t3.comp, function( data, index ){
-					if ( index > 10000 )
-						return true;
-					data.has_process_cooler = Math.random() * index;
-				});
-
-				console.log(end = new Date().getTime(), end - start);
-				console.log('用时ms:' + ( end - start ));
-
-
-				console.log('原生 map------------------------------');
-
-				console.log(start = new Date().getTime());
-
-				t3.comp.map(function( data, index ){
-					data.has_process_cooler = Math.random() * index;
-				});
-
-				console.log(end = new Date().getTime(), end - start);
-				console.log('用时ms:' + ( end - start ));
-
-
-				console.log('na------------------------------');
-
-				console.log(start = new Date().getTime());
-
-				t3.comp.$search('has_process_cooler=*').$update('has_process_cooler=2');
-
-				console.log(end = new Date().getTime());
-				console.log('用时ms:' + ( end - start ));
-
-
-				console.log(t3.comp);
-
 			}
 
-
-			// 查看指定系统
-			// start = new Date().getTime();
-			// var ttt = [t4].$get('parameter_id=3144');
-			// end = new Date().getTime();
-
-			// console.log('用时ms:' + ( end - start ), ttt.length, ttt);
-
-
-			goTime(function(){
-				console.log(t3.$get('type_comp=1'), t3);
-			}, '10个值的计算');
-
-			goTime(function(){
-				console.log( t4.$get('parameter_id=3144').$update({signal_type: 1}) );
-			});
-
-
-			// 获取执行时长
-			function goTime( callback, msg ){
-				console.log('-----------------', msg || '')
-				var start = new Date().getTime();
-				callback();
-				var end = new Date().getTime();
-				console.log('用时ms:' + ( end - start ));
-			}
+			test();
 
 		</script>
 	</body>

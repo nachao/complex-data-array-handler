@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.5/600510/1
+//! version : 0.5/2/20160517
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.5/600510/1;
+	NArray.version = 0.5/2/20160517;
 
 	// 性能记录
 	NArray.log = {
@@ -266,18 +266,24 @@
 		 * @return {string}
 		 **/
 		getInquiry: function ( value ) {
-			var result = '==';
+			// var result = '==';
+			var reg = new RegExp(caseSign.join('|'));
 
-			if ( value ) {
-				each(caseSign, function(i, sign){
-					if ( value.indexOf(sign) >= 0 ) {
-						result = sign;
-						return true;
-					}
-				});
-			}
+			// 输出循环次数
+			// console.log(caseSign.join('|'));
 
-			return result;
+			// if ( value ) {
+			// 	each(caseSign, function(i, sign){
+			// 		if ( value.indexOf(sign) >= 0 ) {
+			// 			result = sign;
+			// 			return true;
+			// 		}
+			// 	});
+			// }
+
+			// return result;
+
+			return reg.exec(value) ? reg.exec(value)[0] : '==';
 		},
  
 		/**
@@ -314,6 +320,9 @@
 		eachCondition: function ( cond ) {
 			var result = [],
 				array = [];
+				
+			// 输出循环次数
+			// console.log(NArray.log.cycles, cond);
 
 			// 处理字符串类型判断是否有多个值
 			if ( !!cond.value && typeof cond.value == 'string' )
@@ -370,6 +379,9 @@
 		parseByString: function ( cond ) {
 			var result = [],
 				array = cond ? cond.toString().split(',') : [''];	// 如果没有需要解析的字符串，则返回带一个空字符串的数组
+
+			// 输出循环次数
+			// console.log(NArray.log.cycles, array);
 
 			// 遍历全部条件
 			each(array, function(i, value){
@@ -456,17 +468,26 @@
 				datas = [datas];
 
 			// 初始化查询路径
-			result.constructor.prototype.$path = [];
+			result.$path = [];
 
 			// 记录循环次数
 			NArray.log.cycles = 0;
 
+			// 输出循环次数
+			// console.log(NArray.log.cycles);
+
 			// 判断和解析条件
 			condition = NArray.parseCondition(condition);
+
+			// 输出循环次数
+			// console.log(NArray.log.cycles);
 
 			// 判断是否有数据
 			if ( datas )
 				NArray.mateDepth(method, condition, datas, result);
+
+			// 输出循环次数
+			// console.log(NArray.log.cycles);
 
 			return result;
 		},
@@ -477,18 +498,19 @@
 			var newPaths = Object.assign([], paths),
 				newKeys = Object.assign([], keys);
 
+			// console.log(NArray.log.cycles, datas, key);
+
 			// 匹配对象类型数据
 			if ( datas && [Function, Object, Array].indexOf(datas.constructor) > -1 ) {
 				if ( typeof key != 'undefined' ) {
 					newKeys.push(key);
 				}
-
 				newPaths.push(datas);
 
 				// 判断当前值是否满足给定的条件，满足则保存数据返回值，以及对应的路径数据
 				if ( NArray.mateCondition(method, datas, condition) ) {
 					result.push(newPaths[newPaths.length-1]);
-					result.constructor.prototype.$path.push({
+					result.$path.push({
 						key: newKeys,
 						value: newPaths
 					});
@@ -507,14 +529,26 @@
 			var result = false,
 				rights = 0;
 
+			// console.log(NArray.log.cycles, 'mateCondition', condition);
+
 			// 循环所以条件
 			each(condition, function(i, param){
 
+				// console.log(NArray.log.cycles, 'each(condition', datas);
+
 				// 条件有主键，被查询数据是对象类型数据
 				if ( param.key && typeof datas == 'object' ) {
-					each(datas, function(key, data){
-						return result = (NArray.mateKeys(key, param, method) && NArray.mateValues(data, param, method));
-					});
+
+					// 如果有搜索主键，则直接匹配，
+					// 没有主键，则需要循环全部数据
+					if ( param.key ) {
+						return result = datas[param.key] && NArray.mateValues(datas[param.key], param, method);
+					}
+					else {
+						each(datas, function(key, data){
+							return result = NArray.mateValues(data, param, method);
+						});
+					}
 				}
 
 				// 如果数据没有键值
@@ -529,12 +563,16 @@
 					result = NArray.mateValues(datas, param, method);
 				}
 
+				// console.log(NArray.log.cycles, 'each(condition end');
+
 				// 判断是否为多条件严格匹配
 				if ( result && method.indexOf('whole') >= 0 )
 					result = ++rights == condition.length;
 
 				return result;
 			});
+
+			// console.log(NArray.log.cycles, 'mateCondition');
 
 			return result;
 		},
