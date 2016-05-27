@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.5/2/20160517
+//! version : 0.5/3/20160527
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.5/2/20160517;
+	NArray.version = 0.5/3/20160527;
 
 	// 性能记录
 	NArray.log = {
@@ -448,6 +448,43 @@
 			return result;
 		},
 
+		/**
+		 *  给结果输出数据绑定一些扩展属性
+ 		 **/
+ 		bindAttr: function ( data, path, key ) {
+
+			if ( path[path.length-2] ) {
+				// 父级数据
+				Object.defineProperty(data, '$parent', {
+					value: path[path.length-2]
+				});
+			}
+
+			if ( key ) {
+				// 父级数据名称，或键值
+				Object.defineProperty(data, '$parentKey', {
+					value: key
+				});
+			}
+
+			if ( path[path.length-2] && key ) {
+				// 获取指定名的父级，没有则返回空值
+				Object.defineProperty(data, '$parentGet', {
+					value: function ( parentKey ) {
+						var data = this,
+							result = null;
+
+						while ( data.$parent && !result ) {
+							data = data.$parent;
+							result = data[parentKey];
+						}
+
+						return result;
+					}
+				});
+			}
+ 		},
+
 		/***************************************************************
 		 *  根据指定的：条件，数据，方式，是否完整匹配，进行深度匹配
 		 *  方式包括：
@@ -467,8 +504,11 @@
 			if ( datas.constructor != Array )
 				datas = [datas];
 
-			// 初始化查询路径
-			result.$path = [];
+			// 初始化数组对象，进行扩展
+			// 绑定路径属性
+			Object.defineProperty(result, '$path', {
+				value: []
+			})
 
 			// 记录循环次数
 			NArray.log.cycles = 0;
@@ -498,14 +538,19 @@
 			var newPaths = Object.assign([], paths),
 				newKeys = Object.assign([], keys);
 
-			// console.log(NArray.log.cycles, datas, key);
-
 			// 匹配对象类型数据
 			if ( datas && [Function, Object, Array].indexOf(datas.constructor) > -1 ) {
+				
+				// 如果有键值，则存储
 				if ( typeof key != 'undefined' ) {
 					newKeys.push(key);
 				}
+
+				// 存储数据到层级关系中
 				newPaths.push(datas);
+
+				// 给每层数据绑定扩展数据
+				NArray.bindAttr(datas, newPaths, key);
 
 				// 判断当前值是否满足给定的条件，满足则保存数据返回值，以及对应的路径数据
 				if ( NArray.mateCondition(method, datas, condition) ) {
@@ -518,7 +563,9 @@
 
 				// 递归所有对象类型（数组和对象）数据
 				each(datas, function( key, data ){
-					NArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
+					if ( typeof data == 'object' ) {
+						NArray.mateDepth(method, condition, data, result, newPaths, newKeys, key);
+					}
 				});
 			}
 		},
@@ -529,12 +576,8 @@
 			var result = false,
 				rights = 0;
 
-			// console.log(NArray.log.cycles, 'mateCondition', condition);
-
 			// 循环所以条件
 			each(condition, function(i, param){
-
-				// console.log(NArray.log.cycles, 'each(condition', datas);
 
 				// 条件有主键，被查询数据是对象类型数据
 				if ( param.key && typeof datas == 'object' ) {
@@ -563,16 +606,12 @@
 					result = NArray.mateValues(datas, param, method);
 				}
 
-				// console.log(NArray.log.cycles, 'each(condition end');
-
 				// 判断是否为多条件严格匹配
 				if ( result && method.indexOf('whole') >= 0 )
 					result = ++rights == condition.length;
 
 				return result;
 			});
-
-			// console.log(NArray.log.cycles, 'mateCondition');
 
 			return result;
 		},
@@ -657,10 +696,7 @@
 		// 对数据进行批量修改或扩展
 		$update: function ( value ) {
 			return NArray.update(this, value);
-		},
-
-		// 查询结果的路径
-		$path: []
+		}
 	});
 
 	// 如果是浏览器，则输出到全局变量

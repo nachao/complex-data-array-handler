@@ -6,6 +6,7 @@
 		<!-- <script src="./narray.min-0.5.js"></script> -->
 		<script src="./narray-0.5.js"></script>
 		<script src="./data/t1.js"></script>
+		<script src="./data/l1.js"></script>
 	</head>
 	<body>
 		<script>
@@ -120,7 +121,7 @@
 				var t3 = [];
 
 				// 指定数据集
-				for ( var j=0; j<10000; j++ ) {
+				for ( var j=0; j<1000; j++ ) {
 					t3.push({
 						value :j
 					});
@@ -153,8 +154,23 @@
 				}, '原生 map');
 
 				// -----------------------------------------
+				// goTime(function(){
+				// 	console.log(t3.$search('value=*').length);//.$update({ value: 0 });
+				// }, 'nArray');
+
+				// -----------------------------------------
+				// goTime(function(){
+				// 	console.log(tt1 = [t1].$search('monitoring_status=1') );//.$update({ value: 0 });
+				// }, 'nArray');
+
+				// -----------------------------------------
+				// goTime(function(){
+				// 	console.log(names.$search('马') );//.$update({ value: 0 });
+				// }, 'nArray');
+
+				// -----------------------------------------
 				goTime(function(){
-					t3.$search('value=*');//.$update({ value: 0 });
+					console.log([l1].$search('monitoring_status=1'));//.$update({ value: 0 });
 				}, 'nArray');
 
 				// -----------------------------------------
