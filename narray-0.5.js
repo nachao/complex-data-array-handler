@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.5/3/20160527
+//! version : 0.5/4/20160527
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.5/3/20160527;
+	NArray.version = 0.5/4/20160527;
 
 	// 性能记录
 	NArray.log = {
@@ -453,21 +453,21 @@
  		 **/
  		bindAttr: function ( data, path, key ) {
 
-			if ( path[path.length-2] ) {
+			if ( path[path.length-2] && !data.$parent ) {
 				// 父级数据
 				Object.defineProperty(data, '$parent', {
 					value: path[path.length-2]
 				});
 			}
 
-			if ( key ) {
+			if ( key && !data.$parentKey ) {
 				// 父级数据名称，或键值
 				Object.defineProperty(data, '$parentKey', {
 					value: key
 				});
 			}
 
-			if ( path[path.length-2] && key ) {
+			if ( path[path.length-2] && key && !data.$parentGet ) {
 				// 获取指定名的父级，没有则返回空值
 				Object.defineProperty(data, '$parentGet', {
 					value: function ( parentKey ) {
