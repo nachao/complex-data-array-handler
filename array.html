@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>nArray 前端数据管理工具</title>
-		<!-- // <script src="./narray-0.5.js"></script> -->
-		<script src="./narray.min.js"></script>
+		<script src="./narray-0.5.js"></script>
+		<!-- // <script src="./narray.min.js"></script> -->
 		<script src="./data/l2.js"></script>
 	</head>
 	<body>
@@ -47,6 +47,14 @@
 				},
 				{
 					id: 5,
+					text: '伟大的人物总是愿意当小人物的.',
+					name: {
+						en: 'R. W. Emerson',
+						zh: '爱默生'
+					}
+				},
+				{
+					id: 0,
 					text: '伟大的人物总是愿意当小人物的.',
 					name: {
 						en: 'R. W. Emerson',
@@ -127,30 +135,30 @@
 				}
 
 				// -----------------------------------------
-				goTime(function(){
-					for ( var i=0; i<t3.length; i++ ) {
-						t3[i].value = Math.random();
-					}
-				}, '原生 for');
+				// goTime(function(){
+				// 	for ( var i=0; i<t3.length; i++ ) {
+				// 		t3[i].value = Math.random();
+				// 	}
+				// }, '原生 for');
 
 				// -----------------------------------------
-				goTime(function(){
-					function useFor ( datas, callback ) {
-						for ( var i=0; i<datas.length; i++ )
-							if ( callback( datas[i], i ) )
-								break;
-					}
-					useFor(t3, function( data, i ){
-						data.value = Math.random();
-					});
-				}, '封装 for');
+				// goTime(function(){
+				// 	function useFor ( datas, callback ) {
+				// 		for ( var i=0; i<datas.length; i++ )
+				// 			if ( callback( datas[i], i ) )
+				// 				break;
+				// 	}
+				// 	useFor(t3, function( data, i ){
+				// 		data.value = Math.random();
+				// 	});
+				// }, '封装 for');
 
 				// -----------------------------------------
-				goTime(function(){
-					t3.map(function( data, index ){
-						data.value = Math.random();
-					});
-				}, '原生 map');
+				// goTime(function(){
+				// 	t3.map(function( data, index ){
+				// 		data.value = Math.random();
+				// 	});
+				// }, '原生 map');
 
 				// -----------------------------------------
 				// goTime(function(){
@@ -168,9 +176,9 @@
 				// }, 'nArray');
 
 				// -----------------------------------------
-				goTime(function(){
-					console.log([l2].$search('monitoring_status=1'));//.$update({ value: 0 });
-				}, 'nArray');
+				// goTime(function(){
+				// 	console.log([l2].$search('monitoring_status=1'));//.$update({ value: 0 });
+				// }, 'nArray');
 
 				// -----------------------------------------
 				// console.log(t3);

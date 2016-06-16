@@ -1,5 +1,5 @@
 //! nArray.js
-//! version : 0.5/4/20160527
+//! version : 0.5/5/20160616
 //! author : Na Chao
 //! license : FFF
 //! github.com/nachao/nArray
@@ -19,7 +19,7 @@
 	NArray.fn = NArray.prototype = {};
 
 	// 备注版本
-	NArray.version = 0.5/4/20160527;
+	NArray.version = 0.5/5/20160616;
 
 	// 性能记录
 	NArray.log = {
@@ -583,10 +583,11 @@
 				if ( param.key && typeof datas == 'object' ) {
 
 					// 如果有搜索主键，则直接匹配，
-					// 没有主键，则需要循环全部数据
 					if ( param.key ) {
-						return result = datas[param.key] && NArray.mateValues(datas[param.key], param, method);
+						return result = Object.keys(datas).indexOf(param.key) > -1 && NArray.mateValues(datas[param.key], param, method);
 					}
+
+					// 没有主键，则需要循环全部数据
 					else {
 						each(datas, function(key, data){
 							return result = NArray.mateValues(data, param, method);
