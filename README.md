@@ -1,180 +1,197 @@
-# nArray
-> 前端数据管理工具。<br />
-> 只需引用文件，便会自动对数组进行功能扩展。<br/>
+> 在前端或Node需要大数据集需要查询数据时使用。
 
-### 1、获取数据（主要功能）：[].$get();
+## 安装
 
-此方法返回新的数据。
-
-##### $get - 参数：
-```javascript
-@param {string} 获取条件，多个条件之间用 `,` 逗号隔开。一个条件由： 条件键 + 条件符号 + 匹配值。
-@param {boolean} 是否必须满足全部条件，默认：false
-@return {array}
+```
+yarn add complex-data-array-handler
+// or
+npm i complex-data-array-handler --dev
 ```
 
-##### $get - 参数说明：
-* 键：数据是对象或数组时有效，选填。
-* 符号：包括 `<`, `>`, `<=`, `>=`, `!=`, `=` ，此部分如果不填则会使用 `=`。
-* 值：需要搜索的内容，一个键对应多个值时，可以使用 `|` 链接。
+## 使用
 
-##### $get - 实例：
+此工具提供了三个方法：
+
+1. 精确查询数据方法：Cdah.arrayGet
+2. 模糊查询数据方法：Cdah.arraySearsh
+3. 数据设置方法：Cdah.arraySet
+
+### Cdah.arrayGet(<data>, <condition>, [matching]): <array>
+
+#### 参数
+
+|名称|数据类型|必填|描述|
+|---|---|---|---|
+|arrayData|Array|Yes|需要查询的数组。|
+|conditionString|String|Yes|查询条件，多个条件之间用 `,` 逗号隔开。单个条件的组成： 条件键 + 条件符号 + 匹配值。|
+
+此方法将返回一个新的数组。
+
+##### 查询条件说明
+
+- 键：数据是对象或数组时有效，选填。
+- 符号：包括 `<`, `>`, `<=`, `>=`, `!=`, `=` ，此部分如果不填则会使用 `=`。
+- 值：需要搜索的内容，一个键对应多个值时，可以使用 `|` 链接。
+
+
+#### 实例
+
+以下为测试数据：
+
 ```javascript
-// 在执行前，请记得引用文件。
-<script src="./narray.min-0.1.js"></script>
-
-// 不同类型的数据
-var names = [
+const sayings = [
 		{
 			id: 1,
 			text: '人人为我,我为人人.',
-			name: {
-				en: 'Dumas pere',
-				zh: '大仲马'
-			}
+			name: { en: 'Dumas pere', zh: '大仲马' }
 		},
 		{
 			id: 2,
 			text: '手中的一只鸟胜于林中的两只鸟.',
-			name: {
-				en: 'Heywood',
-				zh: '希伍德'
-			}
+			name: { en: 'Heywood', zh: '希伍德' }
 		},
 		{
 			id: 3,
 			text: '易得者亦易失.',
 			country: '[美]',
-			name: {
-				en: 'Hazlitt',
-				zh: '赫斯特'
-			}
+			name: { en: 'Hazlitt', zh: '赫斯特' }
 		},
 		{
 			id: 4,
 			text: '时间就是金钱.',
 			country: '[美]',
-			name: {
-				en: 'Benjamin Franklin',
-				zh: '富兰克林'
-			}
+			name: { en: 'Benjamin Franklin', zh: '富兰克林' }
 		},
 		{
 			id: 5,
 			text: '伟大的人物总是愿意当小人物的.',
-			name: {
-				en: 'R. W. Emerson',
-				zh: '爱默生'
-			}
+			name: { en: 'R. W. Emerson', zh: '爱默生' }
 		}
     ];
+```
+假设我们需要获得如下结果：
+```json
+[
+	{ id: 1, text: '人人为我,我为人人.', country: '[法]', name: {en: 'Dumas pere', zh: '大仲马'} },
+	{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
+	{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
+]
+```
+以下几种方式结果一样
 
+```javascript
+Cdah.arrayGet(sayings, '1,2,5');
 
-// 以下几种方式结果一样
-names.$get('1, 2, 5');		
-// -> [
-//		{ id: 1, text: '人人为我,我为人人.', country: '[法]', name: {en: 'Dumas pere', zh: '大仲马'} },
-//		{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
-//		{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
-// 	]
+Cdah.arrayGet(sayings, 'id=1,id=2,id=5');	// 效果同上
 
-names.$get('id=1, id=2, id=5');	// 效果同上
+Cdah.arrayGet(sayings, 'id=1|2|5');			// 效果同上
 
-names.$get('id=1|2|5');			// 效果同上
+Cdah.arrayGet(sayings, 'id<3,id>4');		// 效果同上
 
-names.$get('id<3, id>4');		// 效果同上
-
-// 传入数组查询
+// 数组条件查询
 var ids = [1, 2, 5];
-names.$get('id=' + ids.join('|'));	// 效果同上
+Cdah.arrayGet(sayings, 'id=' + ids.join('|'));	// 效果同上
 ```
 
-### 2、搜索数据（主要功能）：[].$search();
+### Cdah.arraySearch(<data>, <condition>, [matching]): <array>
 
-$get 为匹配条件获取数据，而 $search 为模糊搜索相关的数据，它的参数和 $get 的完全一样。<br/>
-此方法返回新的数据。
+arrayGet 为匹配条件获取数据，而 arraySearch 为模糊搜索相关的数据，它的参数和 arrayGet 的完全一样。
 
-##### $search - 实例（数据沿用 $get 的）：
+此方法仍然返回一个新的数组。
+
+
+#### 实例（数据沿用 $get 的）：
+
+假设需要获取如下数据：
+
+```json
+[
+	{ id: 3, text: '易得者亦易失.', country: '[美]', name: {en: 'Hazlitt', zh: '赫斯特'} },
+	{ id: 4, text: '时间就是金钱.', country: '[美]', name: {en: 'Benjamin Franklin', zh: '富兰克林 '} }
+]
+```
+
+以下几种方式效果一样。
+
 ```javascript
-// 以下几种 $search 获取的数据一样
-names.$search('美');
-// -> [
-//		{ id: 3, text: '易得者亦易失.', country: '[美]', name: {en: 'Hazlitt', zh: '赫斯特'} },
-//		{ id: 4, text: '时间就是金钱.', country: '[美]', name: {en: 'Benjamin Franklin', zh: '富兰克林 '} }
-// 	]
+Cdah.arraySearch(sayings, '美');
 
-names.$search('country=美');	// 效果同上
+Cdah.arraySearch(sayings, 'country=美');	// 效果同上
 
-names.$search('country=*');		// 效果同上，只查询有 country 值的数据
+Cdah.arraySearch(sayings, 'country=*');		// 效果同上，只查询有 country 值的数据
 
 // 获取全部对象类数据
-names.$search('*');
+Cdah.arraySearch(sayings, '*');
 ```
 
-### 3、数据批量更新：[].$update();
+### Cdah.arraySet(<data>, <modify>): <array>
 
-请注意，此方法会修改当前操作的数据。
+这是一个数据批量更新方法，请注意，此方法会修改当前操作的数据。
 
-##### $update - 参数：
+##### 实例（数据沿用 $get 的）：
+
 ```javascript
-@param {*} 新值
-@return {array} 更新过后的数据
+const queryData = Cdah.arraySearch(sayings, 'id=2|5');
+const modifyData = Cdah.arraySet(data, { country: '[美]' });
 ```
 
-##### $update - 实例（数据沿用 $get 的）：
-```javascript
-names.$get('id=2|5').$update({ country: '[美]' });
-//  [
-//		{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
-//		{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
-// 	]
-//
-// -> [
-//		{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', country: '[美]', name: {en: 'Heywood', zh: '希伍德'} },
-//		{ id: 5, text: '伟大的人物总是愿意当小人物的.', country: '[美]', name: {en: 'R. W. Emerson', zh: '爱默生'} }
-// 	]
+修改前：
+
+```json
+[
+	{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
+	{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
+]
 ```
 
-### 4、查看数据路径（唯一的属性）：[].$path;
+修改后的数据：
 
-因为支持深度查询，所有为了更好的跟踪数据而提高的方法。<br/>
-此参数为一个对象数组，路径数据位置对应获取的数据位置。
+```json
+[
+	{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', country: '[美]', name: {en: 'Heywood', zh: '希伍德'} },
+	{ id: 5, text: '伟大的人物总是愿意当小人物的.', country: '[美]', name: {en: 'R. W. Emerson', zh: '爱默生'} }
+ ]
+```
 
-##### $path - 实例（数据沿用 $get 的）：
+### [].$path
+
+针对JavaScript数据无法获取父级数据的问题，提供的方案，此属性提供查询的数据具体路径。
+
+因为支持深度查询，所有为了更好的跟踪数据而提高的方法。此参数为一个对象数组，路径数据位置对应获取的数据位置。
+
+#### $path - 实例（数据沿用 $get 的）：
 ```javascript
+
 console.log( names.$search('希伍德').$path );
-// -> [
-//		{
-//			key: [ 1, 'name' ],		// 此为内容深度查询中的对应key值
-//			value: [
-//				[
-//					{ id: 1, text: '人人为我,我为人人.', name: {en: 'Dumas pere', zh: '大仲马'} },
-//					{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
-//					{ id: 3, text: '易得者亦易失.', country: '[美]', name: {en: 'Hazlitt', zh: '赫斯特'} },
-//					{ id: 4, text: '时间就是金钱.', country: '[美]', name: {en: 'Benjamin Franklin', zh: '富兰克林'} },
-//					{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
-//				],
-//				{ 
-//					id: 2, 
-//					text: '手中的一只鸟胜于林中的两只鸟.',
-//					name: {en: 'Heywood', zh: '希伍德'}
-//				},
-//				{
-//					en: 'Heywood',
-//					zh: '希伍德'
-//				}
-//			]
-//		}
-// 	]
+
+[
+		{
+			key: [ 1, 'name' ],		// 此为内容深度查询中的对应key值
+			value: [
+				[
+					{ id: 1, text: '人人为我,我为人人.', name: {en: 'Dumas pere', zh: '大仲马'} },
+					{ id: 2, text: '手中的一只鸟胜于林中的两只鸟.', name: {en: 'Heywood', zh: '希伍德'} },
+					{ id: 3, text: '易得者亦易失.', country: '[美]', name: {en: 'Hazlitt', zh: '赫斯特'} },
+					{ id: 4, text: '时间就是金钱.', country: '[美]', name: {en: 'Benjamin Franklin', zh: '富兰克林'} },
+					{ id: 5, text: '伟大的人物总是愿意当小人物的.', name: {en: 'R. W. Emerson', zh: '爱默生'} }
+				],
+				{ 
+					id: 2, 
+					text: '手中的一只鸟胜于林中的两只鸟.',
+					name: {en: 'Heywood', zh: '希伍德'}
+				},
+				{
+					en: 'Heywood',
+					zh: '希伍德'
+				}
+			]
+	}
+]
 ```
 
 ### 关联Array文档
-https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array
-<br/>
-<br/>
-<br/>
-<hr/>
 
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array
 
 ###0.4 说明：
 
@@ -187,7 +204,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 
 
 #####详细查询参数说明：
-```javascipt
+​```javascipt
 [
 	{
 		key: 'xxx',
@@ -210,7 +227,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects
 ```
 
 ##### strict（是否严格查询）参数使用示例：
-```javascipt
+​```javascipt
 // 申明测试数据
 var t04_1 = [
 		{

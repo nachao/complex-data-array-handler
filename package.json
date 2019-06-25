@@ -1,0 +1,27 @@
+{
+  "name": "complex-data-array-handler",
+  "version": "1.0.0",
+  "description": "An array collection of large data set query tool.",
+  "main": "/dist/index.js",
+  "author": "Na Chao",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "babel-node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nachao/nArray"
+  },
+  "dependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
+    "mockjs": "^1.0.1-beta3",
+    "rollup": "^1.16.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-uglify": "^6.0.2"
+  }
+}

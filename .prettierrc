@@ -1,0 +1,10 @@
+{
+  "stylelintIntegration": true,
+  "tabWidth": 2,
+  "tabs": false,
+  "singleQuote": true,
+  "semi": false,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "trailingComma": "es5"
+}
