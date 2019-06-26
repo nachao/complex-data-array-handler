@@ -17,7 +17,7 @@ const caseSign = ['<=', '>=', '<', '>', '!=', '==', '=']
 
 // 遍历数组或对象元素，回调返回 true 则终止循环
 // @return {boolean}
-function each(datas, fn, t) {
+function each(datas, fn) {
   const log = []
   let result
   let j
@@ -26,7 +26,7 @@ function each(datas, fn, t) {
     // log.cycles += 1
 
     if (
-      datas.hasOwnProperty(j) &&
+      Object.prototype.hasOwnProperty.call(datas, j) &&
       log.indexOf(datas[j]) < 0 &&
       (result = fn(j, datas[j]))
     )
@@ -48,17 +48,6 @@ function update(datas, value) {
     })
   }
   return datas
-}
-
-// 对数据进行去重复处理（建议只用于非对象数据）
-function unique(datas) {
-  var result = []
-
-  each(datas, function(i, data) {
-    if (result.indexOf(data) < 0) result.push(data)
-  })
-
-  return result
 }
 
 /***********************************************************
@@ -410,19 +399,6 @@ function mateCondition(method, datas, condition) {
   })
 
   return result
-}
-
-// 根据条件，判断值是否匹配
-// Return {boolean}
-function mateKeys(key, param, method) {
-  param.key = param.key.toLocaleLowerCase()
-  key = String(key)
-    .toString()
-    .toLocaleLowerCase()
-
-  return method.indexOf('get') >= 0
-    ? key === param.key
-    : key.indexOf(param.key) >= 0
 }
 
 // 根据条件，判断值是否匹配

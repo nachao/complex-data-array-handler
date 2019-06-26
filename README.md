@@ -12,16 +12,16 @@ npm i complex-data-array-handler --dev
 
 此工具提供了三个方法和一个扩展属性：
 
-1. 精确查询数据方法：cdah.arrayGet
-2. 模糊查询数据方法：cdah.arraySearsh
-3. 数据设置方法：cdah.arraySet
+1. 精确查询数据方法：cdah.get
+2. 模糊查询数据方法：cdah.searsh
+3. 数据设置方法：cdah.set
 4. 数据路径与父级：[].$parent / [].$path
 
 ```javascript
 const cdah = require('complex-data-array-handler')
 ```
 
-## cdah.arrayGet(data, condition, [matching]): array
+## cdah.get(data, condition, [matching]): array
 
 **参数**
 
@@ -100,22 +100,22 @@ const sayings = [
 以下几种方式结果一样：
 
 ```javascript
-cdah.arrayGet(sayings, '1,2,5')
+cdah.get(sayings, '1,2,5')
 
-cdah.arrayGet(sayings, 'id=1,id=2,id=5') // 效果同上
+cdah.get(sayings, 'id=1,id=2,id=5') // 效果同上
 
-cdah.arrayGet(sayings, 'id=1|2|5') // 效果同上
+cdah.get(sayings, 'id=1|2|5') // 效果同上
 
-cdah.arrayGet(sayings, 'id<3,id>4') // 效果同上
+cdah.get(sayings, 'id<3,id>4') // 效果同上
 
 // 数组条件查询
 var ids = [1, 2, 5]
-cdah.arrayGet(sayings, 'id=' + ids.join('|')) // 效果同上
+cdah.get(sayings, 'id=' + ids.join('|')) // 效果同上
 ```
 
-## cdah.arraySearch(data, condition, [matching]): array
+## cdah.search(data, condition, [matching]): array
 
-arrayGet 为匹配条件获取数据，而 arraySearch 为模糊搜索相关的数据，它的参数和 arrayGet 的完全一样。
+get 为匹配条件获取数据，而 search 为模糊搜索相关的数据，它的参数和 get 的完全一样。
 
 此方法仍然返回一个新的数组。
 
@@ -143,25 +143,25 @@ arrayGet 为匹配条件获取数据，而 arraySearch 为模糊搜索相关的�
 以下几种方式效果一样。
 
 ```javascript
-cdah.arraySearch(sayings, '美')
+cdah.search(sayings, '美')
 
-cdah.arraySearch(sayings, 'country=美') // 效果同上
+cdah.search(sayings, 'country=美') // 效果同上
 
-cdah.arraySearch(sayings, 'country=*') // 效果同上，只查询有 country 值的数据
+cdah.search(sayings, 'country=*') // 效果同上，只查询有 country 值的数据
 
 // 获取全部对象类数据
-cdah.arraySearch(sayings, '*')
+cdah.search(sayings, '*')
 ```
 
-## cdah.arraySet(data, modify): array
+## cdah.set(data, modify): array
 
 这是一个数据批量更新方法，请注意，此方法会修改当前操作的数据。
 
 **例子**
 
 ```javascript
-const queryData = cdah.arraySearch(sayings, 'id=2|5')
-const modifyData = cdah.arraySet(data, { country: '[美]' })
+const queryData = cdah.search(sayings, 'id=2|5')
+const modifyData = cdah.set(data, { country: '[美]' })
 ```
 
 修改前：
@@ -209,7 +209,7 @@ const modifyData = cdah.arraySet(data, { country: '[美]' })
 **例子**
 
 ```javascript
-console.log(cdah.arraySearch(sayings, '希伍德').$path)
+console.log(cdah.search(sayings, '希伍德').$path)
 
 // 输出以下数据：
 ;[
@@ -325,10 +325,10 @@ var testData = [
 
 ```javascript
 // 1、快速查询（注：null、undefined 都会转换为 ''）：
-cdah.arrayGet(testData, null)
+cdah.get(testData, null)
 
 // 2、详细查询，和快速查询效果一样：
-cdah.arrayGet(testData, [{ value: null }])
+cdah.get(testData, [{ value: null }])
 ```
 
 输出：
@@ -344,7 +344,7 @@ cdah.arrayGet(testData, [{ value: null }])
 修改 2、详细方式为 “严格查询”：
 
 ```javascript
-cdah.arrayGet(testData, [{ value: null, strict: true }])
+cdah.get(testData, [{ value: null, strict: true }])
 ```
 
 修改后输出：
@@ -359,10 +359,10 @@ cdah.arrayGet(testData, [{ value: null, strict: true }])
 
 ```javascript
 // 1、普通方式
-cdah.arrayGet(testData, 'name=1')
+cdah.get(testData, 'name=1')
 
 // 2、详细方式
-cdah.arrayGet(testData, [{ key: 'name', value: 1 }])
+cdah.get(testData, [{ key: 'name', value: 1 }])
 ```
 
 输出：
@@ -374,7 +374,7 @@ cdah.arrayGet(testData, [{ key: 'name', value: 1 }])
 修改 2、详细方式为严格查询：
 
 ```javascript
-cdah.arrayGet(testData, [
+cdah.get(testData, [
   {
     key: 'name',
     value: 1,
@@ -396,7 +396,7 @@ cdah.arrayGet(testData, [
 多条件查询：'1', true。
 
 ```javascript
-cdah.arrayGet(testData, [{ value: '1' }, { value: true }])
+cdah.get(testData, [{ value: '1' }, { value: true }])
 ```
 
 输出：
@@ -408,7 +408,7 @@ cdah.arrayGet(testData, [{ value: '1' }, { value: true }])
 关闭第一个条件，在所动态更新时很方便：
 
 ```javascript
-cdah.arrayGet(testData, [{ value: '1', enable: false }, { value: true }])
+cdah.get(testData, [{ value: '1', enable: false }, { value: true }])
 ```
 
 输出：
@@ -425,7 +425,7 @@ cdah.arrayGet(testData, [{ value: '1', enable: false }, { value: true }])
 普通查询（遍历数据，只要数据中满足任何一个条件则返回此数据）
 
 ```javascript
-cdah.arrayGet(testData, [{ value: '1' }, { value: 't04' }])
+cdah.get(testData, [{ value: '1' }, { value: 't04' }])
 ```
 
 返回值中包含了 sn = 't03' 的数据。
@@ -437,7 +437,7 @@ cdah.arrayGet(testData, [{ value: '1' }, { value: 't04' }])
 组合查询（遍历数据，只要数据中必须满足全部条件则返回此数据）使用方式很简单，执行给出给二个参数为：true 即可（默认为：false）。
 
 ```javascript
-cdah.arrayGet(testData, [{ value: '1' }, { value: 't04' }], true)
+cdah.get(testData, [{ value: '1' }, { value: 't04' }], true)
 ```
 
 输出：

@@ -51,7 +51,7 @@ const sayings = [
 
 // ====
 
-const arrayGetExpect = [
+const getExpect = [
   {
     id: 1,
     text: '人人为我,我为人人.',
@@ -69,36 +69,36 @@ const arrayGetExpect = [
   },
 ]
 
-it('verify cdah.arrayGet() return', function() {
-  const result = cdah.arrayGet(sayings, '1')
+it('verify cdah.get() return', function() {
+  const result = cdah.get(sayings, '1')
   assert.ok(Array.isArray(result))
   assert.strictEqual(result.length, 1)
   assert.strictEqual(typeof result[0], 'object')
   assert.strictEqual(result[0].id, 1)
 })
 
-it("execute cdah.arrayGet('1,2,5')", function() {
-  assert.deepStrictEqual(cdah.arrayGet(sayings, '1,2,5'), arrayGetExpect)
+it("execute cdah.get('1,2,5')", function() {
+  assert.deepStrictEqual(cdah.get(sayings, '1,2,5'), getExpect)
 })
 
-it("execute cdah.arrayGet('id=1,id=2,id=5')", function() {
+it("execute cdah.get('id=1,id=2,id=5')", function() {
   assert.deepStrictEqual(
-    cdah.arrayGet(sayings, 'id=1,id=2,id=5'),
-    arrayGetExpect
+    cdah.get(sayings, 'id=1,id=2,id=5'),
+    getExpect
   )
 })
 
-it("execute cdah.arrayGet('id=1|2|5')", function() {
-  assert.deepStrictEqual(cdah.arrayGet(sayings, 'id=1|2|5'), arrayGetExpect)
+it("execute cdah.get('id=1|2|5')", function() {
+  assert.deepStrictEqual(cdah.get(sayings, 'id=1|2|5'), getExpect)
 })
 
-it("execute cdah.arrayGet('id<3,id>4')", function() {
-  assert.deepStrictEqual(cdah.arrayGet(sayings, 'id<3,id>4'), arrayGetExpect)
+it("execute cdah.get('id<3,id>4')", function() {
+  assert.deepStrictEqual(cdah.get(sayings, 'id<3,id>4'), getExpect)
 })
 
 // ===
 
-const arraySearchExpect = [
+const searchExpect = [
   {
     id: 3,
     text: '易得者亦易失.',
@@ -113,8 +113,8 @@ const arraySearchExpect = [
   },
 ]
 
-it('verify cdah.arraySearch() return', function() {
-  const result = cdah.arraySearch(sayings, '美')
+it('verify cdah.search() return', function() {
+  const result = cdah.search(sayings, '美')
   assert.ok(Array.isArray(result))
   assert.strictEqual(result.length, 2)
   assert.strictEqual(typeof result[0], 'object')
@@ -122,27 +122,27 @@ it('verify cdah.arraySearch() return', function() {
   assert.strictEqual(result[1].id, 4)
 })
 
-it("execute cdah.arraySearch('美')", function() {
-  assert.deepStrictEqual(cdah.arraySearch(sayings, '美'), arraySearchExpect)
+it("execute cdah.search('美')", function() {
+  assert.deepStrictEqual(cdah.search(sayings, '美'), searchExpect)
 })
 
-it("execute cdah.arraySearch('country=美')", function() {
+it("execute cdah.search('country=美')", function() {
   assert.deepStrictEqual(
-    cdah.arraySearch(sayings, 'country=美'),
-    arraySearchExpect
+    cdah.search(sayings, 'country=美'),
+    searchExpect
   )
 })
 
-it("execute cdah.arraySearch('country=*')", function() {
+it("execute cdah.search('country=*')", function() {
   assert.deepStrictEqual(
-    cdah.arraySearch(sayings, 'country=*'),
-    arraySearchExpect
+    cdah.search(sayings, 'country=*'),
+    searchExpect
   )
 })
 
 // ====
 
-const arraySetExpect = [
+const setExpect = [
   {
     id: 2,
     text: '手中的一只鸟胜于林中的两只鸟.',
@@ -157,11 +157,11 @@ const arraySetExpect = [
   },
 ]
 
-it('execute cdah.arraySet()', function() {
-  const queryData = cdah.arraySearch(sayings, 'id=2|5')
+it('execute cdah.set()', function() {
+  const queryData = cdah.search(sayings, 'id=2|5')
   const copyData = JSON.parse(JSON.stringify(queryData))
-  const modifyData = cdah.arraySet(copyData, { country: '[美]' })
-  assert.deepStrictEqual(modifyData, arraySetExpect)
+  const modifyData = cdah.set(copyData, { country: '[美]' })
+  assert.deepStrictEqual(modifyData, setExpect)
 })
 
 // ====
@@ -213,7 +213,7 @@ const pathExpect = [
 ]
 
 it('verify [].$path', function() {
-  const path = cdah.arraySearch(sayings, '希伍德').$path
+  const path = cdah.search(sayings, '希伍德').$path
   assert.deepStrictEqual(path, pathExpect)
 })
 
@@ -251,32 +251,32 @@ var testData = [
   },
 ]
 
-it('execute cdah.arrayGet(null)', function() {
-  assert.deepStrictEqual(cdah.arrayGet(testData, null), [
+it('execute cdah.get(null)', function() {
+  assert.deepStrictEqual(cdah.get(testData, null), [
     { name: null, sn: 't01' },
     { name: undefined, sn: 't02' },
     { name: '', sn: 't07' },
   ])
 })
 
-it('execute cdah.arrayGet([{ value: null, strict: true }])', function() {
+it('execute cdah.get([{ value: null, strict: true }])', function() {
   assert.deepStrictEqual(
-    cdah.arrayGet(testData, [{ value: null, strict: true }]),
+    cdah.get(testData, [{ value: null, strict: true }]),
     [{ name: null, sn: 't01' }]
   )
 })
 
-it("execute cdah.arrayGet([{ value: '1', enable: true }])", function() {
+it("execute cdah.get([{ value: '1', enable: true }])", function() {
   assert.deepStrictEqual(
-    cdah.arrayGet(testData,
+    cdah.get(testData,
       [{ value: 1, strict: true, enable: true }, { value: true }]),
       [{ name: 1, sn: 't03' },{ name: true, sn: 't05' }]
   )
 })
 
-it("execute cdah.arrayGet([{ value: '1', enable: false }])", function() {
+it("execute cdah.get([{ value: '1', enable: false }])", function() {
   assert.deepStrictEqual(
-    cdah.arrayGet(testData,
+    cdah.get(testData,
       [{ value: 1, strict: true, enable: false }, { value: true }]),
       [{ name: true, sn: 't05' }]
   )
