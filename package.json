@@ -2,7 +2,7 @@
   "name": "complex-data-array-handler",
   "version": "1.0.3",
   "description": "An array collection of large data set query tool.",
-  "main": "/dist/index.js",
+  "main": "./dist/index.js",
   "author": "Na Chao",
   "license": "MIT",
   "scripts": {
