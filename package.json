@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nachao/nArray"
+    "url": "https://github.com/nachao/complex-data-array-handler.git"
   },
   "dependencies": {
     "@babel/core": "^7.4.5",

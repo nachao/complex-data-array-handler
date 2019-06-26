@@ -1,8 +1,8 @@
 import Mock from 'mockjs'
-import Cdah from '../index'
+import Cdah from '../src/index'
 
 const { mock } = Mock.mock({
-    'mock|100000': [{
+    'mock|10000': [{
         'id|+1': 1,
         text: '@title',
         name: {
@@ -58,11 +58,11 @@ var names = [
     }
 ];
 
-console.time()
-console.log(arrayGet(mock, '1,5000,9999'))
-console.timeEnd()
+console.time('Ten thousand pieces of data')
+Cdah.arrayGet(mock, '1,5000,9999')
+console.timeEnd('Ten thousand pieces of data')
 
 
-console.time()
-console.log(arrayGet(names, '1,2,5'))
-console.timeEnd()
+console.time('Small data query')
+Cdah.arrayGet(names, '1,2,5')
+console.timeEnd('Small data query')

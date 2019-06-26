@@ -521,8 +521,10 @@ export function arraySearch(data, value, whole) {
     return mateEnter(data, value, 'search', whole)
 }
 
-export default cdah = {
+const Cdah = {
     arrayGet,
     arraySet,
     arraySearch
 }
+
+export default Cdah
