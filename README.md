@@ -264,17 +264,14 @@ console.log(cdah.arraySearch(sayings, '希伍德').$path)
 **对象查询参数说明：**
 
 ```javascript
-[
-	{
-		key: 'xxx',
-	    value: 'yyyyy',
-	    mode: '==',
-	    enable: true,
-		strict: false
-	},
-	{
-		...
-	}
+;[
+  {
+    key: 'xxx',
+    value: 'yyyyy',
+    mode: '==',
+    enable: true,
+    strict: false
+  }
 ]
 ```
 
