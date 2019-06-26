@@ -2,7 +2,7 @@
   "name": "complex-data-array-handler",
   "version": "1.1.1",
   "description": "An array collection of large data set query tool.",
-  "main": "./dist/index.js",
+  "main": "index.js",
   "author": "Na Chao",
   "license": "MIT",
   "scripts": {
@@ -19,6 +19,7 @@
     "web"
   ],
   "devDependencies": {
+    "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "rollup": "^1.16.2",
     "rollup-plugin-babel": "^4.3.3",
