@@ -17,16 +17,9 @@ npm i complex-data-array-handler --dev
 3. 数据设置方法：cdah.arraySet
 4. 数据路径与父级：[].$parent / [].$path
 
-### Node.js
 
 ```javascript
 const cdah = require('complex-data-array-handler');
-```
-
-### 浏览器
-
-```html
-<script src=""></script>
 ```
 
 
