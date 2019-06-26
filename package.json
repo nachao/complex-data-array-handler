@@ -1,6 +1,6 @@
 {
   "name": "complex-data-array-handler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An array collection of large data set query tool.",
   "main": "/dist/index.js",
   "author": "Na Chao",
@@ -14,9 +14,9 @@
     "url": "https://github.com/nachao/complex-data-array-handler.git"
   },
   "keywords": [
-      "array",
-      "data",
-      "web"
+    "array",
+    "data",
+    "web"
   ],
   "dependencies": {
     "@babel/core": "^7.4.5",
