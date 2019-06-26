@@ -7,11 +7,13 @@
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",
-    "test": "babel-node test/index.js"
+    "test": "mocha test/index.js",
+    "lint": "eslint src/*.js"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test"
+      "pre-commit": "yarn test && yarn lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "repository": {
@@ -25,10 +27,13 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "eslint": "^6.0.1",
     "husky": "^2.5.0",
+    "mocha": "^6.1.4",
     "rollup": "^1.16.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-uglify": "^6.0.2"
