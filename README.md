@@ -12,12 +12,25 @@ npm i complex-data-array-handler --dev
 
 此工具提供了三个方法和一个扩展属性：
 
-1. 精确查询数据方法：Cdah.arrayGet
-2. 模糊查询数据方法：Cdah.arraySearsh
-3. 数据设置方法：Cdah.arraySet
+1. 精确查询数据方法：cdah.arrayGet
+2. 模糊查询数据方法：cdah.arraySearsh
+3. 数据设置方法：cdah.arraySet
 4. 数据路径与父级：[].$parent / [].$path
 
-## Cdah.arrayGet(data, condition, [matching]): array
+### Node.js
+
+```javascript
+const cdah = require('complex-data-array-handler');
+```
+
+### 浏览器
+
+```html
+<script src=""></script>
+```
+
+
+## cdah.arrayGet(data, condition, [matching]): array
 
 ### 参数
 
@@ -83,20 +96,20 @@ const sayings = [
 以下几种方式结果一样：
 
 ```javascript
-Cdah.arrayGet(sayings, '1,2,5');
+cdah.arrayGet(sayings, '1,2,5');
 
-Cdah.arrayGet(sayings, 'id=1,id=2,id=5');	// 效果同上
+cdah.arrayGet(sayings, 'id=1,id=2,id=5');	// 效果同上
 
-Cdah.arrayGet(sayings, 'id=1|2|5');			// 效果同上
+cdah.arrayGet(sayings, 'id=1|2|5');			// 效果同上
 
-Cdah.arrayGet(sayings, 'id<3,id>4');		// 效果同上
+cdah.arrayGet(sayings, 'id<3,id>4');		// 效果同上
 
 // 数组条件查询
 var ids = [1, 2, 5];
-Cdah.arrayGet(sayings, 'id=' + ids.join('|'));	// 效果同上
+cdah.arrayGet(sayings, 'id=' + ids.join('|'));	// 效果同上
 ```
 
-## Cdah.arraySearch(data, condition, [matching]): array
+## cdah.arraySearch(data, condition, [matching]): array
 
 arrayGet 为匹配条件获取数据，而 arraySearch 为模糊搜索相关的数据，它的参数和 arrayGet 的完全一样。
 
@@ -117,25 +130,25 @@ arrayGet 为匹配条件获取数据，而 arraySearch 为模糊搜索相关的�
 以下几种方式效果一样。
 
 ```javascript
-Cdah.arraySearch(sayings, '美');
+cdah.arraySearch(sayings, '美');
 
-Cdah.arraySearch(sayings, 'country=美');	// 效果同上
+cdah.arraySearch(sayings, 'country=美');	// 效果同上
 
-Cdah.arraySearch(sayings, 'country=*');		// 效果同上，只查询有 country 值的数据
+cdah.arraySearch(sayings, 'country=*');		// 效果同上，只查询有 country 值的数据
 
 // 获取全部对象类数据
-Cdah.arraySearch(sayings, '*');
+cdah.arraySearch(sayings, '*');
 ```
 
-## Cdah.arraySet(data, modify): array
+## cdah.arraySet(data, modify): array
 
 这是一个数据批量更新方法，请注意，此方法会修改当前操作的数据。
 
 ### 实例（数据沿用）：
 
 ```javascript
-const queryData = Cdah.arraySearch(sayings, 'id=2|5');
-const modifyData = Cdah.arraySet(data, { country: '[美]' });
+const queryData = cdah.arraySearch(sayings, 'id=2|5');
+const modifyData = cdah.arraySet(data, { country: '[美]' });
 ```
 
 修改前：
@@ -165,7 +178,7 @@ const modifyData = Cdah.arraySet(data, { country: '[美]' });
 ### $path - 例子（数据沿用）：
 
 ```javascript
-console.log( Cdah.arraySearch(sayings, '希伍德').$path );
+console.log( cdah.arraySearch(sayings, '希伍德').$path );
 
 // 输出以下数据：
 [
@@ -201,7 +214,7 @@ console.log( Cdah.arraySearch(sayings, '希伍德').$path );
 
 ### 对象查询参数说明：
 
-```javascipt
+```javascript
 [
 	{
 		key: 'xxx',
@@ -227,7 +240,7 @@ console.log( Cdah.arraySearch(sayings, '希伍德').$path );
 
 ### strict（是否严格查询）参数使用示例：
 
-```javascipt
+```javascript
 // 申明测试数据
 var testData = [
 		{
@@ -267,10 +280,10 @@ var testData = [
 
 ```javascript
 // 1、快速查询（注：null、undefined 都会转换为 ''）：
-Cdah.arrayGet(testData, null);
+cdah.arrayGet(testData, null);
 
 // 2、详细查询，和快速查询效果一样：
-Cdah.arrayGet(testData, [
+cdah.arrayGet(testData, [
 	{ value: null }
 ]);
 ```
@@ -280,14 +293,15 @@ Cdah.arrayGet(testData, [
 ```javascript
 [
 	{name: null, sn: 't01'},
-	{name: undefined, sn: 't02'}
+	{name: undefined, sn: 't02'},
+	{name: '', sn: 't07'}
 ];
 ```
 
 修改 2、详细方式为 “严格查询”：
 
 ```javascript
-Cdah.arrayGet(testData, [
+cdah.arrayGet(testData, [
 	{ value: null, strict: true }
 ]);
 ```
@@ -306,10 +320,10 @@ Cdah.arrayGet(testData, [
 
 ```javascript
 // 1、普通方式
-Cdah.arrayGet(testData, 'name=1');
+cdah.arrayGet(testData, 'name=1');
 
 // 2、详细方式
-Cdah.arrayGet(testData, [
+cdah.arrayGet(testData, [
 	{ key: 'name', value: 1 }
 ]);
 ```
@@ -326,7 +340,7 @@ Cdah.arrayGet(testData, [
 修改 2、详细方式为严格查询：
 
 ```javascript
-Cdah.arrayGet(testData, [
+cdah.arrayGet(testData, [
 	{
 		key: 'name',
 		value: 1,
@@ -349,8 +363,8 @@ Cdah.arrayGet(testData, [
 
 多条件查询：'1', true。
 
-```javascipt
-Cdah.arrayGet(testData, [
+```javascript
+cdah.arrayGet(testData, [
 	{ value: '1' },
 	{ value: true }
 ]);
@@ -358,7 +372,7 @@ Cdah.arrayGet(testData, [
 
 输出：
 
-```javascipt
+```javascript
 [
 	{name: 1, sn: 't03'},
 	{name: '1', sn: 't04'},
@@ -368,8 +382,8 @@ Cdah.arrayGet(testData, [
 
 关闭第一个条件，在所动态更新时很方便：
 
-```javascipt
-Cdah.arrayGet(testData, [
+```javascript
+cdah.arrayGet(testData, [
 	{ value: '1', enable: false }, 
 	{ value: true }
 ]);
@@ -377,7 +391,7 @@ Cdah.arrayGet(testData, [
 
 输出：
 
-```javascipt
+```javascript
 [
 	{name: true, sn: 't05'}
 ];
@@ -390,8 +404,8 @@ Cdah.arrayGet(testData, [
 组合条件查询，必须满足：name = 1, sn: 't04' 的数据。
 普通查询（遍历数据，只要数据中满足任何一个条件则返回此数据）
 
-```javascipt
-Cdah.arrayGet(testData, [
+```javascript
+cdah.arrayGet(testData, [
 	{ value: '1' },
 	{ value: 't04' }
 ]);
@@ -399,7 +413,7 @@ Cdah.arrayGet(testData, [
 
 返回值中包含了 sn = 't03' 的数据。
 
-```javascipt
+```javascript
 [
 	{name: 1, sn: 't03'},
 	{name: '1', sn: 't04'},
@@ -408,8 +422,8 @@ Cdah.arrayGet(testData, [
 
 组合查询（遍历数据，只要数据中必须满足全部条件则返回此数据）使用方式很简单，执行给出给二个参数为：true 即可（默认为：false）。
 
-```javascipt
-Cdah.arrayGet(testData, [
+```javascript
+cdah.arrayGet(testData, [
 	{ value: '1' },
 	{ value: 't04' }
 ], true);

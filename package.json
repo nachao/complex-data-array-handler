@@ -18,13 +18,8 @@
     "data",
     "web"
   ],
-  "dependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
-    "@babel/plugin-transform-runtime": "^7.4.4",
+  "devDependencies": {
     "@babel/preset-env": "^7.4.5",
-    "@babel/runtime": "^7.4.5",
-    "mockjs": "^1.0.1-beta3",
     "rollup": "^1.16.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-uglify": "^6.0.2"

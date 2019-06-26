@@ -509,22 +509,22 @@ function mateValues(value, cond, method) {
     return result
 }
 
-export function arrayGet(data, value, whole) {
+function arrayGet(data, value, whole) {
     return mateEnter(data, value, 'get', whole)
 }
 
-export function arraySet(data, value) {
+function arraySet(data, value) {
     return update(data, value)
 }
 
-export function arraySearch(data, value, whole) {
+function arraySearch(data, value, whole) {
     return mateEnter(data, value, 'search', whole)
 }
 
-const Cdah = {
+const cdah = {
     arrayGet,
     arraySet,
     arraySearch
 }
 
-export default Cdah
+module.exports = cdah
